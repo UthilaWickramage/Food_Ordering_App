@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Food Lane</string>
+    <string name="food_ordering_app">Food Lane</string>
+    <string name="hi_welcome_to_our_app">Hi! Welcome to Our App</string>
+    <string name="there_are_few_steps_to_follow_before_your_first_order">Quick steps to follow before your first order.</string>
+    <string name="get_started">Get Started</string>
+    <string name="let_s_get_your_first_order">Let\'s get your first order</string>
+    <string name="full_name">Full Name</string>
+    <string name="contact_no">Contact no</string>
+    <string name="email_address">Email address</string>
+    <string name="password">Password</string>
+    <string name="sign_up_free_account">Sign up free account</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="by_clicking_sign_up_you_agree_to_the_following">By clicking sign up you agree to the following</string>
+    <string name="terms_and_conditions"><u>Terms and Conditions</u></string>
+</resources>
