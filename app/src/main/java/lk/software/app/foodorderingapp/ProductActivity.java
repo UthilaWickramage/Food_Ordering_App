@@ -19,5 +19,13 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.addToCartBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -95,7 +95,7 @@
         android:background="@drawable/text_field"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"

@@ -60,6 +60,10 @@ public class Product {
         newProducts.add(new Product(2,"Italian Pasta",15.99, R.mipmap.pasta));
         newProducts.add(new Product(3,"Cuttlefish Pizza",5.99, R.mipmap.pizza));
         newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
+        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
+        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
+        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
+        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
         newProducts.add(new Product(5,"Chicken Wings",7.99, R.mipmap.pizza));
 
         return newProducts;

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@color/white"
+    android:elevation="1dp"
+
+    android:paddingLeft="10dp"
+    android:paddingTop="20dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="20dp">
+
+    <ImageView
+        android:id="@+id/order_item_image"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/cart_item_background"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/cake" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/order_item_image"
+        app:layout_constraintStart_toEndOf="@+id/order_item_image"
+        app:layout_constraintTop_toTopOf="@+id/order_item_image">
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chocolate Cake"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/categoryText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Cake" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/order_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$12.99"
+        android:textColor="#FF9800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
+
+    <TextView
+        android:id="@+id/order_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="x1"
+        android:textColor="#8A8A8A"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_item_price" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package lk.software.app.foodorderingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +51,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
                 holder.textView.setText(allCategories.get(position).getName());
                 holder.imageView.setImageResource(allCategories.get(position).getImage());
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(HomeActivity.this,CategoryActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
@@ -95,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
 
         RecyclerView recyclerView2 = findViewById(R.id.recycleView2);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(HomeActivity.this);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
         layoutManager2.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView2.setLayoutManager(layoutManager2);
         recyclerView2.setAdapter(productAdapter);
