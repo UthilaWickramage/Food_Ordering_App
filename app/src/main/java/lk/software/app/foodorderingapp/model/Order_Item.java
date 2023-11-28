@@ -1,11 +1,12 @@
 package lk.software.app.foodorderingapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import lk.software.app.foodorderingapp.R;
 
-public class Order_Item {
+public class Order_Item implements Serializable {
     private int id;
     private String name;
     private String category;

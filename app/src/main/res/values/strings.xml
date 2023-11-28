@@ -13,4 +13,8 @@
     <string name="sign_up">Sign Up</string>
     <string name="by_clicking_sign_up_you_agree_to_the_following">By clicking sign up you agree to the following</string>
     <string name="terms_and_conditions"><u>Terms and Conditions</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">Drawer opening</string>
+    <string name="drawer_close">Drawer closing</string>
 </resources>

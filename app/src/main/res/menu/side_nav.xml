@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    android:icon="@drawable/baseline_add_to_photos_24"-->
+<!--    android:icon="@drawable/baseline_featured_play_list_24"-->
+<!--    android:icon="@drawable/baseline_playlist_add_check_24"-->
+<!--    android:icon="@drawable/baseline_featured_play_list_24"-->
+<!--    android:icon="@drawable/baseline_delivery_dining_24"-->
+<!--    android:icon="@drawable/baseline_supervised_user_circle_24"-->
+<!--    android:icon="@drawable/baseline_login_24"-->
+<!--    android:icon="@drawable/baseline_logout_24"-->
+
+
+    <group android:id="@+id/sideNavGroupMain">
+        <item
+            android:id="@+id/sideNavHome"
+            android:title="Home"
+            android:icon="@drawable/baseline_home_24"
+            android:checked="true"
+
+            />
+        <item
+            android:id="@+id/sideNavAddProduct"
+            android:title="Add Product"
+
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideNavViewProducts"
+            android:title="View Products"
+
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideNavAddCategory"
+            android:title="Add Category"
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideNavViewCategory"
+            android:title="View Category"
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideViewOrders"
+            android:title="View Orders"
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideViewUsers"
+            android:title="View Users"
+            android:visible="false"
+            android:iconTint="@color/black"
+            />
+        <item
+        android:id="@+id/sideNavProfile"
+        android:title="Profile"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:visible="false"
+        android:iconTint="@color/black"
+        />
+
+
+
+    </group>
+
+    <group android:id="@+id/sideNavGroupAuth">
+        <item
+            android:id="@+id/sideNavLogin"
+            android:title="Login"
+            android:iconTintMode="add"
+            android:iconTint="@color/black"
+            />
+        <item
+            android:id="@+id/sideNavLogout"
+            android:title="Logout"
+
+            android:visible="false"/>
+    </group>
+
+
+</menu>

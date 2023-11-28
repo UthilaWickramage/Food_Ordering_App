@@ -1,140 +1,123 @@
 package lk.software.app.foodorderingapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.airbnb.lottie.L;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import lk.software.app.foodorderingapp.fragments.AccountFragment;
+import lk.software.app.foodorderingapp.fragments.BrowseFragment;
+import lk.software.app.foodorderingapp.fragments.CartFragment;
+import lk.software.app.foodorderingapp.fragments.HomeFragment;
+import lk.software.app.foodorderingapp.fragments.SearchFragment;
 import lk.software.app.foodorderingapp.model.Category;
 import lk.software.app.foodorderingapp.model.Product;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
 
-    LayoutInflater layoutInflater;
+    public static final String TAG = HomeActivity.class.getName();
 
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private MaterialToolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
+
+    int searchContainer;
+    int fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        layoutInflater = getLayoutInflater();
-        FrameLayout frameLayout = findViewById(R.id.frameLayout);
-        layoutInflater.inflate(R.layout.home_banner,frameLayout,true);
-        List<Category> allCategories = Category.allCategories();
-        List<Product> newProducts = Product.getNewProducts();
+        fragmentContainer = R.id.fragmentContainer;
+        searchContainer = R.id.searchContainer;
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
+        toolbar = findViewById(R.id.toolbar);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
 
-        RecyclerView.Adapter adapter = new RecyclerView.Adapter<CategoryViewHolder>() {
-            @NonNull
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = layoutInflater.inflate(R.layout.category_card, parent, false);
-                return new CategoryViewHolder(view);
+            public void onClick(View v) {
+                drawerLayout.open();
             }
 
-            @Override
-            public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-                holder.textView.setText(allCategories.get(position).getName());
-                holder.imageView.setImageResource(allCategories.get(position).getImage());
-                holder.imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(HomeActivity.this,CategoryActivity.class);
-                        startActivity(intent);
-                    }
-                });
-            }
 
-            @Override
-            public int getItemCount() {
-                return allCategories.size();
-            }
-        };
+        });
 
-        RecyclerView.Adapter productAdapter = new RecyclerView.Adapter<ProductViewHolder>() {
-            @NonNull
-            @Override
-            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = layoutInflater.inflate(R.layout.product_card, parent, false);
-                return new ProductViewHolder(view);
-            }
+        navigationView.setNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnItemSelectedListener(this);
 
-            @Override
-            public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-                holder.textView.setText(newProducts.get(position).getName());
-                holder.textView2.setText(String.valueOf(newProducts.get(position).getPrice()));
-                holder.imageView.setImageResource(newProducts.get(position).getImage());
-                holder.imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(HomeActivity.this,ProductActivity.class);
-                        startActivity(intent);
-                    }
-                });
-
-            }
-
-            @Override
-            public int getItemCount() {
-                return newProducts.size();
-            }
-        };
-
-        RecyclerView recyclerView = findViewById(R.id.recycleView1);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        RecyclerView recyclerView2 = findViewById(R.id.recycleView2);
-        LinearLayoutManager layoutManager2 = new LinearLayoutManager(HomeActivity.this);
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
-        layoutManager2.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView2.setLayoutManager(layoutManager2);
-        recyclerView2.setAdapter(productAdapter);
+        loadFragment(searchContainer,SearchFragment.getInstance());
+        loadFragment(fragmentContainer,HomeFragment.getInstance());
     }
+
+
+
+    private void loadFragment(int fragmentContainerView, Fragment fragment) {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.replace(fragmentContainerView, fragment);
+        fragmentTransaction.commit();
+    }
+    private void removeFragment(Fragment fragment){
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.remove(fragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId==R.id.bottomNavBrowsing) {
+            loadFragment(fragmentContainer,BrowseFragment.getInstance());
+          loadFragment(searchContainer,SearchFragment.getInstance());
+        }else if(itemId == R.id.bottomNavCart) {
+            loadFragment(fragmentContainer,CartFragment.getInstance());
+            removeFragment(SearchFragment.getInstance());
+        }else if(itemId==R.id.bottomNavProfile) {
+            loadFragment(fragmentContainer,AccountFragment.getInstance());
+            removeFragment(SearchFragment.getInstance());
+        }else {
+            loadFragment(fragmentContainer,HomeFragment.getInstance());
+            loadFragment(searchContainer,SearchFragment.getInstance());
+        }
+
+        return true;
+    }
+
 }
 
-class CategoryViewHolder extends RecyclerView.ViewHolder {
-
-    ImageView imageView;
-    TextView textView;
-
-    public CategoryViewHolder(@NonNull View v) {
-        super(v);
-        imageView = v.findViewById(R.id.imageView3);
-        textView = v.findViewById(R.id.textView8);
-    }
-}
-
-class ProductViewHolder extends RecyclerView.ViewHolder {
-
-    ImageView imageView;
-    TextView textView;
-    TextView textView2;
-
-
-    public ProductViewHolder(@NonNull View v) {
-        super(v);
-        imageView = v.findViewById(R.id.imageView4);
-        textView = v.findViewById(R.id.textView9);
-        textView2 = v.findViewById(R.id.textView15);
-
-    }
-}
 

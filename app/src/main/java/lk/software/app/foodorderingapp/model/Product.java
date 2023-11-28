@@ -1,24 +1,76 @@
 package lk.software.app.foodorderingapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import lk.software.app.foodorderingapp.R;
 
-public class Product {
-    public int id;
-    public String name;
-    public double price;
-    public int image;
+public class Product implements Serializable {
+    private int id;
+    private String name;
+    private double price;
+private int person_per_serve;
+    private double rating;
 
-    public Product(int id, String name, double price, int image) {
+    private String description;
+private String category;
+    private int prepare_time;
+    private String image;
+
+
+
+    public Product(int id, String name, double price, double rating, String description, String category,int person_per_serve, int prepare_time, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.description = description;
+        this.prepare_time = prepare_time;
+        this.rating = rating;
+        this.person_per_serve = person_per_serve;
+        this.category = category;
         this.image = image;
     }
 
+    public String getDescription() {
+        return description;
+    }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getPerson_per_serve() {
+        return person_per_serve;
+    }
+
+    public void setPerson_per_serve(int person_per_serve) {
+        this.person_per_serve = person_per_serve;
+    }
+
     public Product() {
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getPrepare_time() {
+        return prepare_time;
+    }
+
+    public void setPrepare_time(int prepare_time) {
+        this.prepare_time = prepare_time;
     }
 
     public int getId() {
@@ -45,27 +97,14 @@ public class Product {
         this.price = price;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
-    public static List<Product> getNewProducts(){
-        List<Product> newProducts = new ArrayList<>();
 
-        newProducts.add(new Product(1,"Chicken Burger",7.99, R.mipmap.burger));
-        newProducts.add(new Product(2,"Italian Pasta",15.99, R.mipmap.pasta));
-        newProducts.add(new Product(3,"Cuttlefish Pizza",5.99, R.mipmap.pizza));
-        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
-        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
-        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
-        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
-        newProducts.add(new Product(4,"Chocolate Cake",2.99, R.mipmap.cake));
-        newProducts.add(new Product(5,"Chicken Wings",7.99, R.mipmap.pizza));
 
-        return newProducts;
-    }
 }
