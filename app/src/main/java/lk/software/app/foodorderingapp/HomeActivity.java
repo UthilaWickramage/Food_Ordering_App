@@ -28,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import lk.software.app.foodorderingapp.adapters.CategoryAdapter;
 import lk.software.app.foodorderingapp.fragments.AccountFragment;
 import lk.software.app.foodorderingapp.fragments.BrowseFragment;
 import lk.software.app.foodorderingapp.fragments.CartFragment;
@@ -36,7 +37,7 @@ import lk.software.app.foodorderingapp.fragments.SearchFragment;
 import lk.software.app.foodorderingapp.model.Category;
 import lk.software.app.foodorderingapp.model.Product;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener, SearchFragment.SearchFragmentListener ,CategoryAdapter.AdapterListener {
 
     public static final String TAG = HomeActivity.class.getName();
 
@@ -108,8 +109,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(fragmentContainer,CartFragment.getInstance());
             removeFragment(SearchFragment.getInstance());
         }else if(itemId==R.id.bottomNavProfile) {
-            loadFragment(fragmentContainer,AccountFragment.getInstance());
-            removeFragment(SearchFragment.getInstance());
+            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+
         }else {
             loadFragment(fragmentContainer,HomeFragment.getInstance());
             loadFragment(searchContainer,SearchFragment.getInstance());
@@ -118,6 +119,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    public void passSearchText(String searchText) {
+        loadFragment(fragmentContainer,new BrowseFragment(searchText));
+    }
+
+
+
+
+    @Override
+    public void passCategory(String name) {
+        loadFragment(fragmentContainer,new BrowseFragment(name));
+
+    }
 }
 
 

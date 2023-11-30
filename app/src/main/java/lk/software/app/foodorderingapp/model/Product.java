@@ -14,13 +14,13 @@ private int person_per_serve;
     private double rating;
 
     private String description;
-private String category;
+private String category_name;
     private int prepare_time;
     private String image;
 
 
 
-    public Product(int id, String name, double price, double rating, String description, String category,int person_per_serve, int prepare_time, String image) {
+    public Product(int id, String name, double price, double rating, String description, String category_name,int person_per_serve, int prepare_time, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -28,19 +28,19 @@ private String category;
         this.prepare_time = prepare_time;
         this.rating = rating;
         this.person_per_serve = person_per_serve;
-        this.category = category;
+        this.category_name = category_name;
         this.image = image;
     }
 
     public String getDescription() {
         return description;
     }
-    public String getCategory() {
-        return category;
+    public String getCategory_name() {
+        return category_name;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
     public void setDescription(String description) {
         this.description = description;

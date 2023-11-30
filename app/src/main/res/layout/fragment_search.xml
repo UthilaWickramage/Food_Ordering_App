@@ -27,6 +27,8 @@
             android:paddingStart="10dp"
             android:textColor="#aaa"
             android:textSize="13sp"
+            android:imeOptions="actionSearch"
+
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

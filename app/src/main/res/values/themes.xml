@@ -6,7 +6,10 @@
          <item name="colorPrimary">@color/yellow</item>
 
     </style>
-
+    <style name="BottomNavigationTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/yellow</item>
+        <item name="android:colorBackground">@color/yellow</item>
+    </style>
     <style name="Theme.FoodOrderingApp" parent="Base.Theme.FoodOrderingApp" />
     
 

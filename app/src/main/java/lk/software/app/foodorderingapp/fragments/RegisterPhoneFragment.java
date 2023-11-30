@@ -22,6 +22,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import lk.software.app.foodorderingapp.R;
@@ -68,7 +69,11 @@ public class RegisterPhoneFragment extends Fragment {
             public void onClick(View v) {
                 String mobile = editText.getText().toString();
 
-
+                Log.i(RegisterActivity.TAG, "Clicked");
+                progressDialog = new ProgressDialog(requireActivity());
+                progressDialog.setMessage("waiting");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 signInWithPhone(mobile);
 
             }
@@ -93,6 +98,7 @@ public class RegisterPhoneFragment extends Fragment {
                 Toast.makeText(getActivity(), "OTP code sent", Toast.LENGTH_SHORT).show();
                 mobileVerificationId = s;
                 resendingToken = forceResendingToken;
+                progressDialog.dismiss();
                 listener.switchFragmentToVerifyOTPFragment(new VerfiyOTPFragment(mobileVerificationId));
 
             }
@@ -102,10 +108,11 @@ public class RegisterPhoneFragment extends Fragment {
     }
 
     private void signInWithPhone(String mobile) {
+        Log.d(RegisterActivity.TAG, "Working signinwithphone");
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber("+94" + mobile)
                 .setTimeout(90L, TimeUnit.SECONDS)
-                .setActivity(getActivity())
+                .setActivity(requireActivity())
                 .setCallbacks(callbacks)
                 .build();
 

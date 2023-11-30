@@ -62,6 +62,7 @@ public class VerfiyOTPFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         verifyOTPFragmentListener.requestSMSPermissions();
+        firebaseAuth = FirebaseAuth.getInstance();
         EditText editText = view.findViewById(R.id.editTextNumber2);
         Button button = view.findViewById(R.id.button2);
         IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");

@@ -1,6 +1,7 @@
 package lk.software.app.foodorderingapp.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import java.util.concurrent.RecursiveAction;
 
+import lk.software.app.foodorderingapp.HomeActivity;
 import lk.software.app.foodorderingapp.R;
 import lk.software.app.foodorderingapp.model.Category;
 
@@ -26,7 +28,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private FirebaseStorage firebaseStorage;
     private ArrayList<Category> categories;
-
+private AdapterListener adapterListener;
+    public interface AdapterListener{
+        void passCategory(String name);
+    }
     public CategoryAdapter() {
 
     }
@@ -35,6 +40,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.context = context;
         this.firebaseStorage = firebaseStorage;
         this.categories = categories;
+
+        adapterListener = (AdapterListener) context;
     }
 
     @NonNull
@@ -55,6 +62,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                         Picasso.get().load(uri).centerCrop().resize(100, 100).into(holder.imageView);
                     }
                 });
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterListener.passCategory(categories.get(position).getName());
+            }
+        });
     }
 
     @Override

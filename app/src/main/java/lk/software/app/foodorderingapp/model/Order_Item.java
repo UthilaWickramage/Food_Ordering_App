@@ -12,19 +12,52 @@ public class Order_Item implements Serializable {
     private String category;
     private double price;
     private int quantity;
+private double totalProductPrice;
+    private String image;
 
-    private int image;
+    private String currentSaveDate, currentSaveTime;
 
-    public Order_Item(int id, String name, String category, double price, int quantity, int image) {
+    public Order_Item(String name, String category, double price, int quantity, double totalProductPrice, String currentSaveDate,String currentSaveTime, String image) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
         this.quantity = quantity;
+        this.totalProductPrice = totalProductPrice;
+        this.currentSaveDate = currentSaveDate;
+        this.currentSaveTime= currentSaveTime;
         this.image = image;
     }
 
     public Order_Item() {
+    }
+
+    public double getTotalProductPrice() {
+        return totalProductPrice;
+    }
+
+    public void setTotalProductPrice(double totalProductPrice) {
+        this.totalProductPrice = totalProductPrice;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCurrentSaveDate() {
+        return currentSaveDate;
+    }
+
+    public void setCurrentSaveDate(String currentSaveDate) {
+        this.currentSaveDate = currentSaveDate;
+    }
+
+    public String getCurrentSaveTime() {
+        return currentSaveTime;
+    }
+
+    public void setCurrentSaveTime(String currentSaveTime) {
+        this.currentSaveTime = currentSaveTime;
     }
 
     public int getId() {
@@ -67,20 +100,14 @@ public class Order_Item implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getImage(){
+    public String getImage(){
         return image;
     }
 
     public static List<Order_Item> getAllOrderItems(){
         List<Order_Item> orderItems = new ArrayList<>();
 
-        orderItems.add(new Order_Item(1,"Chocolate Cake","Cake",12.99,2, R.mipmap.cake));
-        orderItems.add(new Order_Item(1,"CuttleFish Pizza","Pizza",7.99,1, R.mipmap.pizza));
-        orderItems.add(new Order_Item(1,"Italian Pasta","Pizza",7.99,1, R.mipmap.pasta));
-        orderItems.add(new Order_Item(1,"Chicken Burger","Pizza",7.99,3, R.mipmap.burger));
-        orderItems.add(new Order_Item(1,"British Bread","Pizza",7.99,3, R.mipmap.burger));
-        orderItems.add(new Order_Item(1,"French Fries","Pizza",7.99,3, R.mipmap.pasta));
-        orderItems.add(new Order_Item(1,"Chicken Pizza","Pizza",7.99,3, R.mipmap.pizza));
+
 
 
         return orderItems;

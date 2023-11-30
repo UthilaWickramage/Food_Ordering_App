@@ -1,5 +1,6 @@
 package lk.software.app.foodorderingapp.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +30,10 @@ import lk.software.app.foodorderingapp.R;
 public class RegisterEmailFragment extends Fragment {
     private static RegisterEmailFragment registerEmailFragment;
     FirebaseAuth firebaseAuth;
+
     private RegisterEmailFragmentListener listener;
-    public interface RegisterEmailFragmentListener{
+
+    public interface RegisterEmailFragmentListener {
         void updateUI(FirebaseUser user);
     }
 
@@ -51,13 +56,17 @@ public class RegisterEmailFragment extends Fragment {
         EditText editText = view.findViewById(R.id.editTextTextEmailAddress2);
         EditText passwordText = view.findViewById(R.id.editTextTextPassword2);
         firebaseAuth = FirebaseAuth.getInstance();
-
-        view.setOnClickListener(new View.OnClickListener() {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        Button signup = view.findViewById(R.id.button);
+        Button signin = view.findViewById(R.id.button3);
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editText.getText().toString();
                 String password = passwordText.getText().toString();
-
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Sending Email");
+                progressDialog.show();
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -66,11 +75,14 @@ public class RegisterEmailFragment extends Fragment {
                                     Log.d(TAG, "user created successfully");
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
                                     user.sendEmailVerification();
-                                    Toast.makeText(getActivity(), "Please verify your email", Toast.LENGTH_LONG).show();
-                                    listener.updateUI(user);
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getContext(), "Please verify your email", Toast.LENGTH_LONG).show();
+                                    signup.setVisibility(View.GONE);
+
+                                    signin.setVisibility(View.VISIBLE);
                                 } else {
                                     Log.e(TAG, "error occurred");
-
+                                    progressDialog.dismiss();
                                     Toast.makeText(getContext(), "User creation failed", Toast.LENGTH_SHORT).show();
 
                                 }
@@ -78,15 +90,40 @@ public class RegisterEmailFragment extends Fragment {
                         });
             }
         });
+        view.findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = editText.getText().toString();
+                String password = passwordText.getText().toString();
+                progressDialog.setMessage("signing in");
+                progressDialog.show();
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    progressDialog.dismiss();
+                                    listener.updateUI(firebaseAuth.getCurrentUser());
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressDialog.dismiss();
+                                Toast.makeText(getContext(), "Invalid email or password", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+
     }
-
-
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof RegisterEmailFragmentListener){
+        if (context instanceof RegisterEmailFragmentListener) {
             listener = (RegisterEmailFragmentListener) context;
         }
     }
@@ -95,6 +132,8 @@ public class RegisterEmailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_email, container, false);
+        View view = inflater.inflate(R.layout.fragment_register_email, container, false);
+        view.findViewById(R.id.button3).setVisibility(View.INVISIBLE);
+        return view;
     }
 }

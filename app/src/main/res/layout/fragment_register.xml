@@ -56,16 +56,17 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/google_button_bg"
 
-            android:drawableLeft="@drawable/baseline_email_24"
+            android:backgroundTint="#FFFFFF"
+            android:drawableLeft="@drawable/google_color_svgrepo_com_1_"
+            android:outlineProvider="background"
             android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-          android:outlineProvider="background"
 
+            android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:text="Sign Up With Google"
-            android:textColor="@color/black"
 
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/signu_up_button_phone"
             app:layout_constraintStart_toStartOf="@+id/signu_up_button_phone"

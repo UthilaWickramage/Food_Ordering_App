@@ -109,7 +109,9 @@
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="labeled"
-            app:itemIconTint="@drawable/bottom_nav_custom_icon"
+
+            android:background="?android:attr/windowBackground"
+
             />
 
     </LinearLayout>

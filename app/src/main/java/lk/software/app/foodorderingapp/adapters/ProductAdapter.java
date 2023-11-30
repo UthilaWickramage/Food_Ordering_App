@@ -56,22 +56,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.rating.setText(String.valueOf(products.get(position).getRating()));
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        holder.price.setText("Rs."+decimalFormat.format(products.get(position).getPrice()));
-        firebaseStorage.getReference("productImages/"+products.get(position).getImage()).getDownloadUrl()
-                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Picasso.get().load(uri).resize(150, 150).centerCrop().into(holder.product_image);
-uriImage = uri;
-                            }
-                        });
+        holder.price.setText("Rs." + decimalFormat.format(products.get(position).getPrice()));
+        firebaseStorage.getReference("productImages/" + products.get(position).getImage()).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).resize(150, 150).centerCrop().into(holder.product_image);
+                        uriImage = uri;
+                    }
+                });
         holder.product_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ProductActivity.class);
                 intent.putExtra("product", products.get(position));
-                intent.putExtra("productImage",uriImage);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

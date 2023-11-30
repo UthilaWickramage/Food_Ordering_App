@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,7 +36,7 @@ public class BrowseFragment extends Fragment {
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
-
+private String searchText = "";
     private ArrayList<Product> products;
 
     private ProductAdapter productAdapter;
@@ -45,6 +47,11 @@ public class BrowseFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public BrowseFragment(String searchText) {
+
+        this.searchText = searchText;
+
+    }
     public static BrowseFragment getInstance() {
         if (browseFragment == null) {
             browseFragment = new BrowseFragment();
@@ -58,9 +65,14 @@ public class BrowseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
         RecyclerView productRecycleView = view.findViewById(R.id.recyclerViewBrowseProducts);
         products = new ArrayList<>();
-        loadProducts();
+        if(!this.searchText.isEmpty()){
+            loadProductsWithCondition();
+        }else{
+            loadProducts();
+        }
         productAdapter = new ProductAdapter(requireActivity().getApplicationContext(), firebaseStorage, products);
         GridLayoutManager productGridLayoutManger = new GridLayoutManager(requireActivity().getApplicationContext(), 2);
         Log.d(TAG, String.valueOf(requireActivity().getApplicationContext()));
@@ -78,7 +90,26 @@ public class BrowseFragment extends Fragment {
     }
 
     public void loadProducts() {
-        firebaseFirestore.collection("products")
+        CollectionReference collectionReference = firebaseFirestore.collection("products");
+
+                collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        products.clear();
+                        for (DocumentSnapshot snapshot : value.getDocuments()) {
+                            Product product = snapshot.toObject(Product.class);
+                            products.add(product);
+                        }
+                        productAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+    public void loadProductsWithCondition() {
+        CollectionReference collectionReference = firebaseFirestore.collection("products");
+       collectionReference.where(Filter.or(
+               Filter.equalTo("category_name",searchText),
+               Filter.equalTo("name",searchText)
+                       ))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

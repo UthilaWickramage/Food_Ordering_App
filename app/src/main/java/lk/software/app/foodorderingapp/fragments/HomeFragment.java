@@ -1,5 +1,6 @@
 package lk.software.app.foodorderingapp.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ import lk.software.app.foodorderingapp.adapters.ProductAdapter;
 import lk.software.app.foodorderingapp.model.Category;
 import lk.software.app.foodorderingapp.model.Product;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
 
     public static final String TAG = HomeFragment.class.getName();
 
@@ -45,6 +46,9 @@ private CategoryAdapter categoryAdapter;
 private ProductAdapter productAdapter;
 private static HomeFragment homeFragment;
 
+public interface HomeFragmentListener{
+    void switchToBrowseFragment(String name);
+}
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -66,7 +70,7 @@ private static HomeFragment homeFragment;
         categories = new ArrayList<>();
         RecyclerView categoryRecyclerView = view.findViewById(R.id.recycleView1);
         loadCategories();
-        categoryAdapter = new CategoryAdapter(requireActivity().getApplicationContext(),firebaseStorage,categories);
+        categoryAdapter = new CategoryAdapter(getContext(),firebaseStorage,categories);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity().getApplicationContext());
         Log.d(TAG, String.valueOf(requireActivity().getApplicationContext()));
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -126,4 +130,7 @@ firebaseFirestore.collection("categories")
                     }
                 });
     }
+
+
+
 }

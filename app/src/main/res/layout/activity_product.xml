@@ -63,6 +63,7 @@
                 android:text="Pasta"
                 android:textSize="18sp"
                 android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/nameSingle"
                 app:layout_constraintEnd_toEndOf="@+id/productPicture"
                 app:layout_constraintTop_toTopOf="@+id/nameSingle" />
 
@@ -123,13 +124,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/descriptionSingle" />
 
             <Button
-                android:id="@+id/addToCartBtn"
+                android:id="@+id/addToOrderBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_bg"
-                android:text="Place Order"
+                android:text="Add to Order"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -149,12 +150,12 @@
                 app:layout_constraintTop_toTopOf="@+id/quantityOrder">
 
                 <TextView
-                    android:id="@+id/plus"
+                    android:id="@+id/minus"
                     android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="#FFC107"
                     android:gravity="center"
-                    android:text="+"
+                    android:text="-"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -168,12 +169,12 @@
                     android:text="1" />
 
                 <TextView
-                    android:id="@+id/minus"
+                    android:id="@+id/plus"
                     android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="#FFC107"
                     android:gravity="center"
-                    android:text="-"
+                    android:text="+"
                     android:textSize="20dp"
                     android:textStyle="bold" />
             </LinearLayout>

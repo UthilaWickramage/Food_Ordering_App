@@ -41,7 +41,16 @@ public static final String TAG = RegisterActivity.class.getName();
                 switchFragment(RegisterFragment.getInstance());
             }
         });
+
+        findViewById(R.id.singinTextview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+            }
+        });
     }
+
+
 
     @Override
     public void switchFragment(Fragment fragment) {
@@ -96,7 +105,7 @@ public static final String TAG = RegisterActivity.class.getName();
                 Toast.makeText(RegisterActivity.this, "Please verify or email", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
 
             startActivity(intent);
             finish();
