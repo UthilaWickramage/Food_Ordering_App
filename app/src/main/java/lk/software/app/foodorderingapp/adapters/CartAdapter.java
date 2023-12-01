@@ -91,6 +91,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                                             cartItems.remove(cartItems.get(position));
                                             notifyDataSetChanged();
                                             CartFragment.setCartVisibility();
+                                            CartFragment.calculateTotals();
                                             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
                                         }else{
                                             Toast.makeText(context, "Something occured", Toast.LENGTH_SHORT).show();

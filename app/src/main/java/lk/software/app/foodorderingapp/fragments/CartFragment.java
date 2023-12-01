@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +53,10 @@ public class CartFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     private static ScrollView scrollView;
     private static LottieAnimationView lottieAnimationView;
+
+    private  static  TextView totalTextView;
+
+    private static TextView subTotalTextView;
     CartAdapter cartAdapter;
     FirebaseStorage firebaseStorage;
     private static CartFragment cartFragment;
@@ -88,18 +93,13 @@ public class CartFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(cartAdapter);
-        final double[] subTotal = new double[1];
-        final double[] cartTotal = new double[1];
-        cartItems.forEach(cartItem -> {
-            subTotal[0] = cartItem.getTotalProductPrice() + subTotal[0];
-            cartTotal[0] = cartItem.getTotalProductPrice() + cartTotal[0];
-        });
-        TextView subTotalTextView = view.findViewById(R.id.subTotal);
-        TextView totalTextView = view.findViewById(R.id.cartTotal);
+
+        subTotalTextView = view.findViewById(R.id.subTotal);
+        totalTextView = view.findViewById(R.id.cartTotal);
         TextView deliveryTotalTextView = view.findViewById(R.id.deliveryTotal);
-        subTotalTextView.setText("Rs." + String.valueOf(subTotal[0]));
-        totalTextView.setText("Rs." + String.valueOf(cartTotal[0]));
+
         deliveryTotalTextView.setText("Rs. 0.00");
+        calculateTotals();
         view.findViewById(R.id.imageView10).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +154,7 @@ public class CartFragment extends Fragment {
                                                             Toast.makeText(requireContext(), "Order saved", Toast.LENGTH_SHORT).show();
                                                         cartItems.clear();
                                                         cartAdapter.notifyDataSetChanged();
+                                                        calculateTotals();
                                                         setCartVisibility();
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
@@ -176,6 +177,17 @@ setCartVisibility();
     }
 
 
+    public static void calculateTotals(){
+        final double[] subTotal = new double[1];
+        final double[] cartTotal = new double[1];
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        cartItems.forEach(cartItem -> {
+            subTotal[0] = cartItem.getTotalProductPrice() + subTotal[0];
+            cartTotal[0] = cartItem.getTotalProductPrice() + cartTotal[0];
+        });
+        subTotalTextView.setText("Rs." +decimalFormat.format(subTotal[0]));
+        totalTextView.setText("Rs." + decimalFormat.format(cartTotal[0]));
+    }
     public static void setCartVisibility(){
 
         if(cartItems.isEmpty()){
@@ -202,6 +214,7 @@ setCartVisibility();
                             }
                             cartAdapter.notifyDataSetChanged();
                             setCartVisibility();
+                            calculateTotals();
                         }
 
                     }
