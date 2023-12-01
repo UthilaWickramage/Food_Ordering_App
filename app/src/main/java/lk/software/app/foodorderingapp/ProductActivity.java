@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import lk.software.app.foodorderingapp.model.Order_Item;
+import lk.software.app.foodorderingapp.model.Cart_Item;
 import lk.software.app.foodorderingapp.model.Product;
 
 public class ProductActivity extends AppCompatActivity {
@@ -131,7 +131,7 @@ private FirebaseAuth firebaseAuth;
                 TextView quantityTextView = findViewById(R.id.quantity);
                 double totalProductPrice = product.getPrice()*Double.parseDouble(quantityTextView.getText().toString());
 
-                Order_Item order_item = new Order_Item(
+                Cart_Item cart_item = new Cart_Item(
                         product.getName(),
                         product.getCategory_name(),
                         product.getPrice(),
@@ -141,10 +141,11 @@ private FirebaseAuth firebaseAuth;
                         saveCurrentTime,
                         product.getImage()
                 );
-                firebaseFirestore.collection("orders").document(firebaseAuth.getCurrentUser().getUid()).collection("order_items").add(order_item)
+                firebaseFirestore.collection("carts").document(firebaseAuth.getCurrentUser().getUid()).collection("cart_items").add(cart_item)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
+
                                 Toast.makeText(ProductActivity.this,"Product added to Cart",Toast.LENGTH_LONG).show();
 
                             }

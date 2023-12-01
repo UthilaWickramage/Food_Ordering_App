@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     updateUI(firebaseAuth.getCurrentUser());
                                 }
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -137,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     updateUI(user);
                 }
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

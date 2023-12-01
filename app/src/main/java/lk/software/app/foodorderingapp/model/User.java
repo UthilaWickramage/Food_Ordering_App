@@ -5,23 +5,36 @@ public class User {
     private String email;
     private String phone;
     private String profile_img;
+    private String register_date;
+    private String register_time;
 
     public String getFull_name() {
         return full_name;
     }
 
-    public User(String full_name, String email, String phone, String profile_img) {
-        this.full_name = full_name;
-        this.email = email;
-        this.phone = phone;
-        this.profile_img = profile_img;
-    }
+
 
     public User() {
     }
 
     public void setFull_name(String full_name) {
         this.full_name = full_name;
+    }
+
+    public String getRegister_date() {
+        return register_date;
+    }
+
+    public void setRegister_date(String register_date) {
+        this.register_date = register_date;
+    }
+
+    public String getRegister_time() {
+        return register_time;
+    }
+
+    public void setRegister_time(String register_time) {
+        this.register_time = register_time;
     }
 
     public String getEmail() {

@@ -17,7 +17,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="5dp">
 
             <Button
                 android:id="@+id/checkoutBtn"
@@ -90,7 +91,7 @@
                 app:layout_constraintVertical_bias="0.35" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/subTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -100,31 +101,31 @@
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView3" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/deliveryTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="$0"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView21"
-                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                app:layout_constraintEnd_toEndOf="@+id/subTotal"
+                app:layout_constraintTop_toBottomOf="@+id/subTotal" />
 
             <TextView
-                android:id="@+id/textView27"
+                android:id="@+id/cartTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="$23.49"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView25"
-                app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                app:layout_constraintEnd_toEndOf="@+id/deliveryTotal"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryTotal" />
 
             <ImageView
                 android:id="@+id/imageView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/textView28"
-                app:layout_constraintEnd_toEndOf="@+id/textView27"
+                app:layout_constraintEnd_toEndOf="@+id/cartTotal"
                 app:layout_constraintTop_toTopOf="@+id/textView28"
                 app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
 

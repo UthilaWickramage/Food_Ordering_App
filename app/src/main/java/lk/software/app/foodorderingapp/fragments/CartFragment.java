@@ -1,10 +1,12 @@
 package lk.software.app.foodorderingapp.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,25 +28,25 @@ import java.util.ArrayList;
 
 import lk.software.app.foodorderingapp.HomeActivity;
 import lk.software.app.foodorderingapp.R;
-import lk.software.app.foodorderingapp.adapters.OrderAdapter;
-import lk.software.app.foodorderingapp.model.Order_Item;
-
+import lk.software.app.foodorderingapp.adapters.CartAdapter;
+import lk.software.app.foodorderingapp.model.Cart_Item;
 
 public class CartFragment extends Fragment {
-    ArrayList<Order_Item> order_items;
+    ArrayList<Cart_Item> cartItems;
     LayoutInflater layoutInflater;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
 
-    OrderAdapter orderAdapter;
+    CartAdapter cartAdapter;
     FirebaseStorage firebaseStorage;
     private static CartFragment cartFragment;
+
     public CartFragment() {
         // Required empty public constructor
     }
 
-    public static CartFragment getInstance(){
-        if(cartFragment==null){
+    public static CartFragment getInstance() {
+        if (cartFragment == null) {
             cartFragment = new CartFragment();
         }
         return cartFragment;
@@ -55,16 +58,25 @@ public class CartFragment extends Fragment {
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        order_items = new ArrayList<>();
+        cartItems = new ArrayList<>();
         loadOrders();
-        orderAdapter = new OrderAdapter(requireContext(), firebaseStorage, order_items);
+        cartAdapter = new CartAdapter(requireContext(), firebaseStorage, cartItems);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(orderAdapter);
-
-
-
+        recyclerView.setAdapter(cartAdapter);
+        final double[] subTotal = new double[1];
+        final double[] cartTotal = new double[1];
+        cartItems.forEach(cartItem -> {
+            subTotal[0] = cartItem.getTotalProductPrice() + subTotal[0];
+            cartTotal[0] = cartItem.getTotalProductPrice() + cartTotal[0];
+        });
+        TextView subTotalTextView = view.findViewById(R.id.subTotal);
+        TextView totalTextView = view.findViewById(R.id.cartTotal);
+        TextView deliveryTotalTextView = view.findViewById(R.id.deliveryTotal);
+        subTotalTextView.setText("Rs." + String.valueOf(subTotal[0]));
+        totalTextView.setText("Rs." + String.valueOf(cartTotal[0]));
+        deliveryTotalTextView.setText("Rs. 0.00");
         view.findViewById(R.id.imageView10).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,24 +85,33 @@ public class CartFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.checkoutBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
     }
 
 
-
-
     public void loadOrders() {
-        firebaseFirestore.collection("orders").document(firebaseAuth.getCurrentUser().getUid()).collection("order_items").get()
+        firebaseFirestore.collection("carts").document(firebaseAuth.getCurrentUser().getUid()).collection("cart_items").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             for (DocumentSnapshot snapshot : task.getResult()) {
-                                Order_Item orderItems = snapshot.toObject(Order_Item.class);
-                                order_items.add(orderItems);
-
+                                String id = snapshot.getId();
+                                Cart_Item cart_item = snapshot.toObject(Cart_Item.class);
+                                cartItems.add(cart_item);
+                                cart_item.setDocumentId(id);
                             }
-                            orderAdapter.notifyDataSetChanged();
+                            cartAdapter.notifyDataSetChanged();
                         }
+
                     }
                 });
     }

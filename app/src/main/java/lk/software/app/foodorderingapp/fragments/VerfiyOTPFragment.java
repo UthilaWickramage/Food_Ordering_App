@@ -20,21 +20,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import lk.software.app.foodorderingapp.R;
+import lk.software.app.foodorderingapp.model.User;
 import lk.software.app.foodorderingapp.receivers.OTPReceiver;
 
 public class VerfiyOTPFragment extends Fragment {
     private VerifyOTPFragmentListener verifyOTPFragmentListener;
     private static VerfiyOTPFragment verifyOTPFragment;
+
+    private FirebaseFirestore firebaseFirestore;
 
     private FirebaseAuth firebaseAuth;
     private static String mobileVerificationId;
@@ -96,9 +106,43 @@ public class VerfiyOTPFragment extends Fragment {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             AuthResult authResult = task.getResult();
-                            FirebaseUser user = authResult.getUser();
-                            verifyOTPFragmentListener.updateUItoHome(user);
+                            FirebaseUser currentUser = authResult.getUser();
+if(currentUser!=null){
+    String phoneNumber = currentUser.getPhoneNumber();
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat currentDate = new SimpleDateFormat("MM.dd.yyyy");
+    String saveCurrentDate = currentDate.format(calendar.getTime());
+    SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+    String saveCurrentTime = currentTime.format(calendar.getTime());
+    firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
+            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        User user = task.getResult().toObject(User.class);
+                        if(user==null){
+                            User newUser = new User();
+                            newUser.setEmail(phoneNumber);
+                            newUser.setRegister_date(saveCurrentDate);
+                            newUser.setRegister_time(saveCurrentTime);
+
+                            firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(requireContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
                         }
+                    }
+
+                }
+            });
+}
+                            verifyOTPFragmentListener.updateUItoHome(currentUser);
+                        }
+
                     }
                 });
     }
