@@ -105,7 +105,7 @@ public class AccountActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
                                                     Transformation transformation = new MaskTransformation(AccountActivity.this, R.drawable.profile_image_background);
-                                                    Picasso.get().load(uri).transform(transformation)
+                                                    Picasso.get().load(uri).transform(transformation).centerCrop()
                                                             .resize(100, 100).into(profile_img);
 
                                                 }
@@ -381,7 +381,7 @@ public class AccountActivity extends AppCompatActivity {
 
                         imagePath = result.getData().getData();
                         Transformation transformation = new MaskTransformation(AccountActivity.this, R.drawable.profile_image_background);
-                        Picasso.get().load(imagePath).transform(transformation)
+                        Picasso.get().load(imagePath).transform(transformation).centerCrop()
                                 .resize(100, 100).into(profile_img);
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(AccountActivity.this);
                         alertDialog.setTitle("You selected Profile Picture");

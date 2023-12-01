@@ -7,18 +7,14 @@ public class Order_Item {
 
     private double totalProductPrice;
 
-    private String documentId;
+String image;
 
-    private String currentSaveDate, currentSaveTime;
-
-    public Order_Item(String product_name, double price, int quantity, double totalProductPrice, String documentId, String currentSaveDate, String currentSaveTime) {
+    public Order_Item(String product_name, double price, int quantity, double totalProductPrice,String image) {
         this.product_name = product_name;
         this.price = price;
         this.quantity = quantity;
         this.totalProductPrice = totalProductPrice;
-        this.documentId = documentId;
-        this.currentSaveDate = currentSaveDate;
-        this.currentSaveTime = currentSaveTime;
+       this.image = image;
     }
 
     public Order_Item() {
@@ -56,27 +52,11 @@ public class Order_Item {
         this.totalProductPrice = totalProductPrice;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public String getImage() {
+        return image;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
-    }
-
-    public String getCurrentSaveDate() {
-        return currentSaveDate;
-    }
-
-    public void setCurrentSaveDate(String currentSaveDate) {
-        this.currentSaveDate = currentSaveDate;
-    }
-
-    public String getCurrentSaveTime() {
-        return currentSaveTime;
-    }
-
-    public void setCurrentSaveTime(String currentSaveTime) {
-        this.currentSaveTime = currentSaveTime;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

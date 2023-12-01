@@ -11,44 +11,62 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import lk.software.app.foodorderingapp.HomeActivity;
 import lk.software.app.foodorderingapp.R;
+import lk.software.app.foodorderingapp.RegisterActivity;
 import lk.software.app.foodorderingapp.adapters.CartAdapter;
 import lk.software.app.foodorderingapp.model.Cart_Item;
+import lk.software.app.foodorderingapp.model.Order;
+import lk.software.app.foodorderingapp.model.Order_Item;
 
 public class CartFragment extends Fragment {
-    ArrayList<Cart_Item> cartItems;
-    LayoutInflater layoutInflater;
+    private static ArrayList<Cart_Item> cartItems;
+
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
-
+    private static ScrollView scrollView;
+    private static LottieAnimationView lottieAnimationView;
     CartAdapter cartAdapter;
     FirebaseStorage firebaseStorage;
     private static CartFragment cartFragment;
 
     public CartFragment() {
         // Required empty public constructor
+
     }
 
     public static CartFragment getInstance() {
         if (cartFragment == null) {
             cartFragment = new CartFragment();
         }
+
+
         return cartFragment;
     }
 
@@ -59,7 +77,12 @@ public class CartFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         cartItems = new ArrayList<>();
-        loadOrders();
+        loadCartItems();
+        scrollView = view.findViewById(R.id.scrollView);
+        lottieAnimationView = view.findViewById(R.id.lottie);
+
+//        lottieAnimationView.animate().translationX(0).setDuration(5000);
+        lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
         cartAdapter = new CartAdapter(requireContext(), firebaseStorage, cartItems);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
@@ -88,16 +111,83 @@ public class CartFragment extends Fragment {
         view.findViewById(R.id.checkoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (cartItems.isEmpty()) {
+                    Toast.makeText(requireContext(), "add products to the cart first", Toast.LENGTH_SHORT).show();
 
+                } else {
+                    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                    if (currentUser != null) {
+                        String saveCurrentTime, saveCurrentDate;
+                        Calendar calendar = Calendar.getInstance();
+
+                        SimpleDateFormat currentDate = new SimpleDateFormat("MM,dd,yyyy");
+                        saveCurrentDate = currentDate.format(calendar.getTime());
+                        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+                        saveCurrentTime = currentTime.format(calendar.getTime());
+                        Order order = new Order();
+                        order.setCurrentSaveDate(saveCurrentDate);
+                        order.setCurrentSaveTime(saveCurrentTime);
+                        final double[] orderTotal = new double[1];
+                        cartItems.forEach(cartItem -> {
+                            orderTotal[0] = cartItem.getTotalProductPrice() + orderTotal[0];
+                        });
+                        order.setTotalOrderPrice(orderTotal[0]);
+
+                        firebaseFirestore.collection("orders").document(currentUser.getUid()).collection("order_list").add(order)
+                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        cartItems.forEach(cartItem -> {
+                                            Order_Item order_item = new Order_Item();
+                                            order_item.setProduct_name(cartItem.getName());
+                                            order_item.setPrice(cartItem.getPrice());
+                                            order_item.setQuantity(cartItem.getQuantity());
+                                            order_item.setTotalProductPrice(cartItem.getTotalProductPrice());
+                                            order_item.setImage(cartItem.getImage());
+
+                                            firebaseFirestore.collection("orders").document(currentUser.getUid())
+                                                    .collection("order_list").document(task.getResult().getId()).collection("order_items")
+                                                    .add(order_item)
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            Toast.makeText(requireContext(), "Order saved", Toast.LENGTH_SHORT).show();
+                                                        cartItems.clear();
+                                                        cartAdapter.notifyDataSetChanged();
+                                                        setCartVisibility();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    });
+                                        });
+                                    }
+
+
+                                });
+                    }
+                }
             }
         });
-
-
-
+setCartVisibility();
     }
 
 
-    public void loadOrders() {
+    public static void setCartVisibility(){
+
+        if(cartItems.isEmpty()){
+            scrollView.setVisibility(View.GONE);
+            lottieAnimationView.setVisibility(View.VISIBLE);
+        }else{
+            scrollView.setVisibility(View.VISIBLE);
+            lottieAnimationView.setVisibility(View.GONE);
+        }
+    }
+
+    public void loadCartItems() {
         firebaseFirestore.collection("carts").document(firebaseAuth.getCurrentUser().getUid()).collection("cart_items").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -108,8 +198,10 @@ public class CartFragment extends Fragment {
                                 Cart_Item cart_item = snapshot.toObject(Cart_Item.class);
                                 cartItems.add(cart_item);
                                 cart_item.setDocumentId(id);
+
                             }
                             cartAdapter.notifyDataSetChanged();
+                            setCartVisibility();
                         }
 
                     }

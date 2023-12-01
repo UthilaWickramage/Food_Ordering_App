@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                                     @Override
                                                     public void onSuccess(Uri uri) {
                                                         Transformation transformation = new MaskTransformation(HomeActivity.this, R.drawable.profile_image_background);
-                                                        Picasso.get().load(uri).transform(transformation)
+                                                        Picasso.get().load(uri).transform(transformation).centerCrop()
                                                                 .resize(40, 40).into(imageView);
                                                     }
                                                 });

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import lk.software.app.foodorderingapp.R;
 import lk.software.app.foodorderingapp.RegisterActivity;
+import lk.software.app.foodorderingapp.fragments.CartFragment;
 import lk.software.app.foodorderingapp.model.Cart_Item;
 
 
@@ -89,6 +90,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                                         if(task.isSuccessful()){
                                             cartItems.remove(cartItems.get(position));
                                             notifyDataSetChanged();
+                                            CartFragment.setCartVisibility();
                                             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
                                         }else{
                                             Toast.makeText(context, "Something occured", Toast.LENGTH_SHORT).show();
