@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,11 +95,32 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Menu navMenu = navigationView.getMenu();
+
+                if (currentUser != null) {
+                    navMenu.findItem(R.id.sideNavBrowseProduct).setVisible(true);
+                    navMenu.findItem(R.id.sideNavCart).setVisible(true);
+                    navMenu.findItem(R.id.sideNavOrder).setVisible(true);
+                    navMenu.findItem(R.id.sideNavAccount).setVisible(true);
+                    navMenu.findItem(R.id.sideNavLogout).setVisible(true);
+                    navMenu.findItem(R.id.sideNavLogin).setVisible(false);
+
+                } else {
+                    navMenu.findItem(R.id.sideNavLogin).setVisible(true);
+                }
                 drawerLayout.open();
             }
 
 
         });
+
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//
+//                return true;
+//            }
+//        });
 
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setOnItemSelectedListener(this);
@@ -127,23 +149,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                                                 .resize(40, 40).into(imageView);
                                                     }
                                                 });
-                                    }else{
-                                        Log.d(RegisterActivity.TAG,"not successful");
+                                    } else {
+                                        Log.d(RegisterActivity.TAG, "not successful");
 
                                     }
-                                }else{
-                                    Log.d(RegisterActivity.TAG,"not successful");
+                                } else {
+                                    Log.d(RegisterActivity.TAG, "not successful");
 
                                 }
-                            }else{
-                                Log.d(RegisterActivity.TAG,"not successful");
+                            } else {
+                                Log.d(RegisterActivity.TAG, "not successful");
                             }
                         }
 
 
                     });
-        }else{
-            Log.d(RegisterActivity.TAG,"no user");
+        } else {
+            Log.d(RegisterActivity.TAG, "no user");
 
         }
     }
@@ -163,6 +185,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -179,6 +202,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else {
             loadFragment(fragmentContainer, HomeFragment.getInstance());
             loadFragment(searchContainer, SearchFragment.getInstance());
+        }
+
+
+
+        if (itemId == R.id.sideNavHome) {
+            loadFragment(fragmentContainer, HomeFragment.getInstance());
+            loadFragment(searchContainer, SearchFragment.getInstance());
+        } else if (itemId == R.id.sideNavBrowseProduct) {
+            loadFragment(fragmentContainer, BrowseFragment.getInstance());
+            loadFragment(searchContainer, SearchFragment.getInstance());
+        } else if (itemId == R.id.sideNavCart) {
+            loadFragment(fragmentContainer, CartFragment.getInstance());
+            removeFragment(SearchFragment.getInstance());
+        } else if (itemId == R.id.sideNavOrder) {
+            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+
+        } else if (itemId == R.id.sideNavAccount) {
+            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+        } else if(itemId==R.id.sideNavLogin) {
+            startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+
+        }else if(itemId==R.id.sideNavLogout) {
+            Log.e(RegisterActivity.TAG,"Working logout");
+            firebaseAuth.signOut();
+            recreate();
         }
 
         return true;

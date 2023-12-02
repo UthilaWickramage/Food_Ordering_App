@@ -19,49 +19,31 @@
 
             />
         <item
-            android:id="@+id/sideNavAddProduct"
-            android:title="Add Product"
+            android:id="@+id/sideNavBrowseProduct"
+            android:title="Browse Products"
+android:icon="@drawable/baseline_fastfood_24"
+            android:visible="false"
+
+            />
+        <item
+            android:id="@+id/sideNavCart"
+            android:title="My Cart"
 
             android:visible="false"
-            android:iconTint="@color/black"
+            android:icon="@drawable/baseline_shopping_cart_24"
             />
         <item
-            android:id="@+id/sideNavViewProducts"
-            android:title="View Products"
+            android:id="@+id/sideNavOrder"
+            android:title="My Orders"
+            android:visible="false"
+           android:icon="@drawable/baseline_delivery_dining_24"
+            />
 
-            android:visible="false"
-            android:iconTint="@color/black"
-            />
         <item
-            android:id="@+id/sideNavAddCategory"
-            android:title="Add Category"
-            android:visible="false"
-            android:iconTint="@color/black"
-            />
-        <item
-            android:id="@+id/sideNavViewCategory"
-            android:title="View Category"
-            android:visible="false"
-            android:iconTint="@color/black"
-            />
-        <item
-            android:id="@+id/sideViewOrders"
-            android:title="View Orders"
-            android:visible="false"
-            android:iconTint="@color/black"
-            />
-        <item
-            android:id="@+id/sideViewUsers"
-            android:title="View Users"
-            android:visible="false"
-            android:iconTint="@color/black"
-            />
-        <item
-        android:id="@+id/sideNavProfile"
-        android:title="Profile"
+        android:id="@+id/sideNavAccount"
+        android:title="My Account"
         android:icon="@drawable/baseline_account_circle_24"
         android:visible="false"
-        android:iconTint="@color/black"
         />
 
 
@@ -73,12 +55,12 @@
             android:id="@+id/sideNavLogin"
             android:title="Login"
             android:iconTintMode="add"
-            android:iconTint="@color/black"
+            android:icon="@drawable/baseline_login_24"
             />
         <item
             android:id="@+id/sideNavLogout"
             android:title="Logout"
-
+android:icon="@drawable/baseline_logout_24"
             android:visible="false"/>
     </group>
 
