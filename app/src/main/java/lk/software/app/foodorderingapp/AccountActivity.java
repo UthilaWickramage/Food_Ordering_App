@@ -59,8 +59,9 @@ public class AccountActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private Uri imagePath;
     ImageButton profile_img;
-
+    User user;
     ProgressDialog progressDialog;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,19 +88,26 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-
+findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(AccountActivity.this,OrderActivity.class);
+  startActivity(intent);
+    }
+});
         firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            User user = task.getResult().toObject(User.class);
+                            user = task.getResult().toObject(User.class);
                             if (user != null) {
+
                                 textView.setText(user.getFull_name());
                                 if (user.getFull_name() != null) {
                                     name.setText(user.getFull_name());
                                 }
-                                if(user.getProfile_img()!=null){
+                                if (user.getProfile_img() != null) {
                                     firebaseStorage.getReference("profileImages/" + user.getProfile_img()).getDownloadUrl()
                                             .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
@@ -144,7 +152,9 @@ public class AccountActivity extends AppCompatActivity {
                 editTextName1.setBackgroundResource(R.drawable.text_field);
                 alertName.setMessage("Enter your name");
 
-
+                if(user.getFull_name()!=null){
+                    editTextName1.setText(user.getFull_name());
+                }
                 alertName.setView(editTextName1);
 
                 alertName.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -178,7 +188,9 @@ public class AccountActivity extends AppCompatActivity {
 
                 editTextName1.setBackgroundResource(R.drawable.text_field);
                 alertName.setMessage("Enter your phone number");
-
+                if(user.getPhone()!=null){
+                    editTextName1.setText(user.getPhone());
+                }
 
                 alertName.setView(editTextName1);
 
@@ -213,7 +225,9 @@ public class AccountActivity extends AppCompatActivity {
                 editTextName1.setBackgroundResource(R.drawable.text_field);
                 alertName.setMessage("Enter your email address");
 
-
+                if(user.getEmail()!=null){
+                    editTextName1.setText(user.getEmail());
+                }
                 alertName.setView(editTextName1);
 
                 alertName.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -317,8 +331,8 @@ public class AccountActivity extends AppCompatActivity {
                                 User user = task.getResult().toObject(User.class);
                                 String imageId;
                                 if (user != null) {
-                                    if(user.getProfile_img()==null){
-                                       imageId= UUID.randomUUID().toString();
+                                    if (user.getProfile_img() == null) {
+                                        imageId = UUID.randomUUID().toString();
                                         user.setProfile_img(imageId);
                                     }
                                     imageId = user.getProfile_img();
@@ -326,38 +340,38 @@ public class AccountActivity extends AppCompatActivity {
                                     updateUsersCollection(user);
 
 
-                                        if (imagePath != null) {
+                                    if (imagePath != null) {
 
-                                            StorageReference reference = firebaseStorage.getReference("profileImages")
-                                                    .child(imageId);
-                                            reference.putFile(imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                @Override
-                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                    progressDialog.dismiss();
+                                        StorageReference reference = firebaseStorage.getReference("profileImages")
+                                                .child(imageId);
+                                        reference.putFile(imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                progressDialog.dismiss();
 
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(AccountActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                                }
-                                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                                @Override
-                                                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                                    double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
-                                                    progressDialog.setMessage("Uploading... " + (int) progress + "% done");
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(AccountActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                progressDialog.dismiss();
+                                                Toast.makeText(AccountActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                                double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+                                                progressDialog.setMessage("Uploading... " + (int) progress + "% done");
+                                            }
+                                        });
                                     }
-
-
+                                } else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(AccountActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                 }
+
+
                             }
+                        }
 
 
                     });

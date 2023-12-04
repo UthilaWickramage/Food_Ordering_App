@@ -52,8 +52,19 @@ public class LoginActivity extends AppCompatActivity {
                 EditText email = findViewById(R.id.editTextText2);
                 EditText password = findViewById(R.id.editTextTextPassword);
 
+
                 String emailTxt = email.getText().toString();
                 String passwordTxt = password.getText().toString();
+
+                if(emailTxt.isEmpty()){
+                    email.setError("email cannot be empty");
+                    return;
+                }
+
+                if(passwordTxt.length()<6){
+                    password.setError("password must be at least six characters");
+                    return;
+                }
 
                 ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
                 progressDialog.setMessage("Signing in");
@@ -111,7 +122,10 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.signipTextView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -124,7 +138,9 @@ public class LoginActivity extends AppCompatActivity {
                 return;
 
             }
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         }
     }

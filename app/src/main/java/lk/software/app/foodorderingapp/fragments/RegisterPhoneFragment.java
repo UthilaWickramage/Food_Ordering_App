@@ -69,6 +69,11 @@ public class RegisterPhoneFragment extends Fragment {
             public void onClick(View v) {
                 String mobile = editText.getText().toString();
 
+                if(mobile.length()<10){
+                    editText.setError("phone number should ten characters long");
+                    return;
+                }
+
                 Log.i(RegisterActivity.TAG, "Clicked");
                 progressDialog = new ProgressDialog(requireActivity());
                 progressDialog.setMessage("waiting");

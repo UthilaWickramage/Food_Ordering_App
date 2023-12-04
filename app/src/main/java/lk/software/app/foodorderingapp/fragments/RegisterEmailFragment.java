@@ -77,6 +77,17 @@ public class RegisterEmailFragment extends Fragment {
             public void onClick(View v) {
                 String email = editText.getText().toString();
                 String password = passwordText.getText().toString();
+
+                if(email.isEmpty()){
+                    editText.setError("email cannot be empty");
+                    return;
+
+                }
+
+                if(password.length()<6){
+                    passwordText.setError("password must be at least six character long");
+                    return;
+                }
                 progressDialog.setCancelable(false);
                 progressDialog.setMessage("Sending Email");
                 progressDialog.show();

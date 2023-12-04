@@ -152,7 +152,21 @@ public class CartFragment extends Fragment {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(requireContext(), "Order saved", Toast.LENGTH_SHORT).show();
-                                                        cartItems.clear();
+                                                       cartItems.forEach(cartItem1 -> {
+                                                           firebaseFirestore.collection("carts").document(firebaseAuth.getCurrentUser().getUid()).collection("cart_items").document(cartItem1.getDocumentId())
+                                                                   .delete()
+                                                                   .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                       @Override
+                                                                       public void onSuccess(Void unused) {
+                                                                           Log.d(RegisterActivity.TAG, "DocumentSnapshot successfully deleted!");
+                                                                       }
+                                                                   }).addOnFailureListener(new OnFailureListener() {
+                                                                       @Override
+                                                                       public void onFailure(@NonNull Exception e) {
+                                                                           Log.e(RegisterActivity.TAG, "DocumentSnapshot deleting failed!");
+                                                                       }
+                                                                   });
+                                                       });
                                                         cartAdapter.notifyDataSetChanged();
                                                         calculateTotals();
                                                         setCartVisibility();

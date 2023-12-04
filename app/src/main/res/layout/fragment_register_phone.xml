@@ -10,20 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/editTextTextPassword2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/text_field"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
-
         <Button
             android:id="@+id/button"
             android:layout_width="0dp"
@@ -33,9 +19,9 @@
             android:text="Sign Up"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword2"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPassword2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2" />
+            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
+            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
         <EditText
             android:id="@+id/editTextNumber"

@@ -2,6 +2,7 @@ package lk.software.app.foodorderingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -12,8 +13,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,6 +77,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageView;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        loadFragment(searchContainer, SearchFragment.getInstance());
+        loadFragment(fragmentContainer, HomeFragment.getInstance());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -84,6 +99,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
+
         imageView = findViewById(R.id.home_profile_img);
         loadProfileImage();
         setSupportActionBar(toolbar);
@@ -91,11 +107,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        Menu navMenu = navigationView.getMenu();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Menu navMenu = navigationView.getMenu();
+
 
                 if (currentUser != null) {
                     navMenu.findItem(R.id.sideNavBrowseProduct).setVisible(true);
@@ -114,19 +130,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         });
 
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//
-//                return true;
-//            }
-//        });
-
+        loadFragment(searchContainer, SearchFragment.getInstance());
+        loadFragment(fragmentContainer, HomeFragment.getInstance());
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setOnItemSelectedListener(this);
 
-        loadFragment(searchContainer, SearchFragment.getInstance());
-        loadFragment(fragmentContainer, HomeFragment.getInstance());
     }
 
     private void loadProfileImage() {
@@ -194,10 +202,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(fragmentContainer, BrowseFragment.getInstance());
             loadFragment(searchContainer, SearchFragment.getInstance());
         } else if (itemId == R.id.bottomNavCart) {
-            loadFragment(fragmentContainer, CartFragment.getInstance());
-            removeFragment(SearchFragment.getInstance());
+            if(currentUser!=null){
+                loadFragment(fragmentContainer, CartFragment.getInstance());
+                removeFragment(SearchFragment.getInstance());
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                alertDialog.setTitle("Go to Login?");
+                alertDialog.setMessage("You need to login to create a cart");
+                alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
+                alertDialog.show();
+            }
+
         } else if (itemId == R.id.bottomNavProfile) {
-            startActivity(new Intent(HomeActivity.this, AccountActivity.class));
+            if(currentUser!=null){
+                startActivity(new Intent(HomeActivity.this, AccountActivity.class));
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                alertDialog.setTitle("Go to Login?");
+                alertDialog.setMessage("You need to login to view your account");
+                alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
+                alertDialog.show();
+            }
+
 
         } else {
             loadFragment(fragmentContainer, HomeFragment.getInstance());
@@ -213,13 +249,55 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(fragmentContainer, BrowseFragment.getInstance());
             loadFragment(searchContainer, SearchFragment.getInstance());
         } else if (itemId == R.id.sideNavCart) {
-            loadFragment(fragmentContainer, CartFragment.getInstance());
-            removeFragment(SearchFragment.getInstance());
+            if(currentUser!=null){
+                loadFragment(fragmentContainer, CartFragment.getInstance());
+                removeFragment(SearchFragment.getInstance());
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                alertDialog.setTitle("Go to Login?");
+                alertDialog.setMessage("You need to login to create a cart");
+                alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
+                alertDialog.show();
+            }
+
         } else if (itemId == R.id.sideNavOrder) {
-            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+            if(currentUser!=null){
+                startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                alertDialog.setTitle("Go to Login?");
+                alertDialog.setMessage("You need to login to view your orders");
+                alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
+                alertDialog.show();
+            }
 
         } else if (itemId == R.id.sideNavAccount) {
-            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+            if(currentUser!=null){
+                startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                alertDialog.setTitle("Go to Login?");
+                alertDialog.setMessage("You need to login to view your account");
+                alertDialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
+                alertDialog.show();
+            }
         } else if(itemId==R.id.sideNavLogin) {
             startActivity(new Intent(HomeActivity.this,LoginActivity.class));
 
@@ -227,6 +305,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.e(RegisterActivity.TAG,"Working logout");
             firebaseAuth.signOut();
             recreate();
+
         }
 
         return true;
