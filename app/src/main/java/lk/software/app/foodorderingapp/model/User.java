@@ -8,6 +8,18 @@ public class User {
     private String register_date;
     private String register_time;
 
+    private String longitude;
+
+    private String latitude;
+
+    private String address;
+
+    private String city;
+
+    private String postal_code;
+
+    private String area;
+
     public String getFull_name() {
         return full_name;
     }
@@ -59,5 +71,53 @@ public class User {
 
     public void setProfile_img(String profile_img) {
         this.profile_img = profile_img;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPostal_code() {
+        return postal_code;
+    }
+
+    public void setPostal_code(String postal_code) {
+        this.postal_code = postal_code;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

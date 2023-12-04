@@ -87,7 +87,12 @@ public class AccountActivity extends AppCompatActivity {
                 activityResultLauncher.launch(Intent.createChooser(intent, "Select Image"));
             }
         });
-
+findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(AccountActivity.this,LocationActivity.class));
+    }
+});
 findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {

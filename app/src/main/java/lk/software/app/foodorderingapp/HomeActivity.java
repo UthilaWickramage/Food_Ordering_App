@@ -19,6 +19,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -73,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser currentUser;
     int searchContainer;
     int fragmentContainer;
+    TextView textView;
 
     ImageView imageView;
 
@@ -95,11 +98,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchContainer = R.id.searchContainer;
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
-
+textView = findViewById(R.id.address);
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
+if(currentUser!=null){
+    loadDeliverToDetails();
 
+}else{
+    textView.setText("Select Location");
+}
+
+findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(currentUser!=null){
+            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+        }
+    }
+});
         imageView = findViewById(R.id.home_profile_img);
         loadProfileImage();
         setSupportActionBar(toolbar);
@@ -134,6 +151,32 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(fragmentContainer, HomeFragment.getInstance());
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setOnItemSelectedListener(this);
+
+        findViewById(R.id.linearLayoutLocation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this,LocationActivity.class));
+            }
+        });
+    }
+
+    private void loadDeliverToDetails() {
+
+        firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
+
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                       User user = documentSnapshot.toObject(User.class);
+
+                        textView.setText(user.getCity()+","+user.getArea());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(HomeActivity.TAG,"failed");
+                    }
+                });
 
     }
 
@@ -322,6 +365,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(fragmentContainer, new BrowseFragment(name));
 
     }
+
+
 }
 
 
