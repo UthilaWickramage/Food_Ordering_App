@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -155,7 +156,12 @@ findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener(
         findViewById(R.id.linearLayoutLocation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this,LocationActivity.class));
+                if(currentUser!=null){
+                    startActivity(new Intent(HomeActivity.this,LocationActivity.class));
+
+                }else{
+                    Toast.makeText(HomeActivity.this,"Login first",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -168,8 +174,10 @@ findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener(
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                        User user = documentSnapshot.toObject(User.class);
+if(user!=null){
+    textView.setText(user.getCity()+","+user.getArea());
 
-                        textView.setText(user.getCity()+","+user.getArea());
+}
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

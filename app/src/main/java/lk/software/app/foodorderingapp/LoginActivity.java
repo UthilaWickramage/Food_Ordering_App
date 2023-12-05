@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         signInClient = Identity.getSignInClient(getApplicationContext());
 
+
         findViewById(R.id.signup_btn2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
 
             }
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, AccountActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -163,13 +164,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    private void updateUIOneTapSignIn(FirebaseUser user) {
-        if (user != null) {
-
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-            finish();
-        }
-    }
+//    private void updateUIOneTapSignIn(FirebaseUser user) {
+//        if (user != null) {
+//
+//            startActivity(new Intent(LoginActivity.this, AccountActivity.class));
+//            finish();
+//        }
+//    }
     private void handleSignInResult(Intent intent) {
         try {
             SignInCredential signInCredentialFromIntent = signInClient.getSignInCredentialFromIntent(intent);

@@ -113,7 +113,7 @@ public class RegisterPhoneFragment extends Fragment {
     }
 
     private void signInWithPhone(String mobile) {
-        Log.d(RegisterActivity.TAG, "Working signinwithphone");
+        Log.d(RegisterActivity.TAG, "Working sign in with phone");
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber("+94" + mobile)
                 .setTimeout(90L, TimeUnit.SECONDS)

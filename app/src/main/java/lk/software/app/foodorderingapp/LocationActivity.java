@@ -192,32 +192,7 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
                     }
                 }
             });
-//            LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY,7000)
-//                    .setWaitForAccurateLocation(true)
-//                    .setMinUpdateIntervalMillis(2000)
-//                    .setMaxUpdateDelayMillis(4000)
-//                    .build();
-//
-//            fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-//                @Override
-//                public void onLocationResult(@NonNull LocationResult locationResult) {
-//                    super.onLocationResult(locationResult);
-//                    currentLocation = locationResult.getLastLocation();
-//                    LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-//
-//                    if(marker_current==null){
-//
-//                        MarkerOptions liveLocation = new MarkerOptions()
-//                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.man))
-//                                .title("Live Location").position(latLng);
-//                        marker_current =googleMap.addMarker(liveLocation);
-//                    }else{
-//                        marker_current.setPosition(latLng);
-//                    }
-//                    moveCamera(latLng);
-//                saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
-//                }
-//            }, Looper.getMainLooper());
+
         }
 
 

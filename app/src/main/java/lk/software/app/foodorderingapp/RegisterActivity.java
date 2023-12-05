@@ -62,14 +62,14 @@ public static final String TAG = RegisterActivity.class.getName();
     @Override
     public void updateUIFromGoogleSignInToHome(FirebaseUser user) {
         if(user!=null){
-            startActivity(new Intent(RegisterActivity.this,HomeActivity.class));
+            startActivity(new Intent(RegisterActivity.this,AccountActivity.class));
             finish();
         }
     }
 
     @Override
     public void updateUItoHome(FirebaseUser user) {
-        startActivity(new Intent(RegisterActivity.this,HomeActivity.class));
+        startActivity(new Intent(RegisterActivity.this, AccountActivity.class));
         finish();
     }
 
@@ -105,7 +105,7 @@ public static final String TAG = RegisterActivity.class.getName();
                 Toast.makeText(RegisterActivity.this, "Please verify or email", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, AccountActivity.class);
 
             startActivity(intent);
             finish();

@@ -9,16 +9,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,12 +76,24 @@ public class AccountActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+        requestCallPermissions();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         progressDialog = new ProgressDialog(AccountActivity.this);
         TextView name = findViewById(R.id.textView19);
         TextView email = findViewById(R.id.textView30);
         TextView phone = findViewById(R.id.textView23);
         TextView textView = findViewById(R.id.textView12);
+        FrameLayout frameLayout = findViewById(R.id.frameLayout2);
+        View view = getLayoutInflater().inflate(R.layout.call_banner, frameLayout, true);
+        view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel: 0718263689"));
+                startActivity(intent);
+            }
+        });
         profile_img = findViewById(R.id.imageView4);
         profile_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,6 +314,16 @@ findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener
         }
     }
 
+    public void requestCallPermissions() {
+        String callPermission = Manifest.permission.CALL_PHONE;
+        int grant = ContextCompat.checkSelfPermission(getApplicationContext(), callPermission);
+        if (grant != PackageManager.PERMISSION_GRANTED) {
+            String[] permissionList = new String[1];
+            permissionList[0] = callPermission;
+            ActivityCompat.requestPermissions(this, permissionList, 1);
+
+        }
+    }
     private void updateUserPhone(String getInput) {
 
         if (currentUser != null) {

@@ -73,6 +73,7 @@ public class VerfiyOTPFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         verifyOTPFragmentListener.requestSMSPermissions();
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         EditText editText = view.findViewById(R.id.editTextNumber2);
         Button button = view.findViewById(R.id.button2);
         IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
@@ -107,39 +108,39 @@ public class VerfiyOTPFragment extends Fragment {
                         if (task.isSuccessful()) {
                             AuthResult authResult = task.getResult();
                             FirebaseUser currentUser = authResult.getUser();
-if(currentUser!=null){
-    String phoneNumber = currentUser.getPhoneNumber();
-    Calendar calendar = Calendar.getInstance();
-    SimpleDateFormat currentDate = new SimpleDateFormat("MM.dd.yyyy");
-    String saveCurrentDate = currentDate.format(calendar.getTime());
-    SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-    String saveCurrentTime = currentTime.format(calendar.getTime());
-    firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
-            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        User user = task.getResult().toObject(User.class);
-                        if(user==null){
-                            User newUser = new User();
-                            newUser.setEmail(phoneNumber);
-                            newUser.setRegister_date(saveCurrentDate);
-                            newUser.setRegister_time(saveCurrentTime);
+                            if (currentUser != null) {
+                                String phoneNumber = currentUser.getPhoneNumber();
+                                Calendar calendar = Calendar.getInstance();
+                                SimpleDateFormat currentDate = new SimpleDateFormat("MM.dd.yyyy");
+                                String saveCurrentDate = currentDate.format(calendar.getTime());
+                                SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+                                String saveCurrentTime = currentTime.format(calendar.getTime());
+                                firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    User user = task.getResult().toObject(User.class);
+                                                    if (user == null) {
+                                                        User newUser = new User();
+                                                        newUser.setPhone(phoneNumber);
+                                                        newUser.setRegister_date(saveCurrentDate);
+                                                        newUser.setRegister_time(saveCurrentTime);
 
-                            firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(requireContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                                                        firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
-                                        }
-                                    });
-                        }
-                    }
+                                                                    }
+                                                                });
+                                                    }
+                                                }
 
-                }
-            });
-}
+                                            }
+                                        });
+                            }
                             verifyOTPFragmentListener.updateUItoHome(currentUser);
                         }
 
