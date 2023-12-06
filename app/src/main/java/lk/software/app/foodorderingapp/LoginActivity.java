@@ -33,11 +33,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import lk.software.app.foodorderingapp.model.User;
+import lk.software.app.foodorderingapp.model.UserStatusEnum;
 
 public class LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     public static final String TAG = LoginActivity.class.getName();
     private SignInClient signInClient;
+
+    FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +52,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
         signInClient = Identity.getSignInClient(getApplicationContext());
-
+firebaseFirestore= FirebaseFirestore.getInstance();
 
         findViewById(R.id.signup_btn2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EditText email = findViewById(R.id.editTextText2);
                 EditText password = findViewById(R.id.editTextTextPassword);
 
@@ -71,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.setMessage("Signing in");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
+                final boolean[] isBlocked = new boolean[1];
 
                 firebaseAuth.signInWithEmailAndPassword(emailTxt, passwordTxt)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -78,7 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     progressDialog.dismiss();
+
                                     updateUI(firebaseAuth.getCurrentUser());
+
+
                                 }
 
                             }
@@ -139,21 +151,47 @@ public class LoginActivity extends AppCompatActivity {
                 return;
 
             }
-            Intent intent = new Intent(LoginActivity.this, AccountActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            firebaseFirestore.collection("customers").document(firebaseAuth.getCurrentUser().getUid()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User user1 = documentSnapshot.toObject(User.class);
+                            if(user1!=null){
+                                if(user1.getStatus().equals(UserStatusEnum.BLOCKED.toString())){
+                                    Toast.makeText(LoginActivity.this,"You account is suspended",Toast.LENGTH_LONG).show();
+
+                                }else{
+                                    Intent intent = new Intent(LoginActivity.this, AccountActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            }else{
+                                Log.e("user","null");
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LoginActivity.this,"You account is suspended",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
         }
     }
     private void firebaseAuthWithGoogle(String googleIdToken) {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleIdToken, null);
         Task<AuthResult> authResultTask = firebaseAuth.signInWithCredential(authCredential);
+
         authResultTask.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     updateUI(user);
+
                 }
 
             }

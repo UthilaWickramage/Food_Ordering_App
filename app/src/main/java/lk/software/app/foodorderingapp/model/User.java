@@ -7,7 +7,7 @@ public class User {
     private String profile_img;
     private String register_date;
     private String register_time;
-
+private String status;
     private String longitude;
 
     private String latitude;
@@ -119,5 +119,13 @@ public class User {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -64,7 +64,7 @@ public class AccountActivity extends AppCompatActivity {
     public static final int NAME_CODE = 2;
 
     private FirebaseStorage firebaseStorage;
-    EditText txt;
+
     FirebaseUser currentUser;
     private Uri imagePath;
     ImageButton profile_img;
