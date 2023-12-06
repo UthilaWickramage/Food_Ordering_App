@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -57,7 +59,9 @@ import lk.software.app.foodorderingapp.model.User;
 
 public class AccountActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
+    public static final int EMAIL_CODE = 0;
+    public static final int PHONE_CODE = 1;
+    public static final int NAME_CODE = 2;
 
     private FirebaseStorage firebaseStorage;
     EditText txt;
@@ -72,7 +76,7 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
@@ -104,19 +108,19 @@ public class AccountActivity extends AppCompatActivity {
                 activityResultLauncher.launch(Intent.createChooser(intent, "Select Image"));
             }
         });
-findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(AccountActivity.this,LocationActivity.class));
-    }
-});
-findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(AccountActivity.this,OrderActivity.class);
-  startActivity(intent);
-    }
-});
+        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AccountActivity.this, LocationActivity.class));
+            }
+        });
+        findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountActivity.this, OrderActivity.class);
+                startActivity(intent);
+            }
+        });
         firebaseFirestore.collection("customers").document(currentUser.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -165,31 +169,8 @@ findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener
         findViewById(R.id.imageView11).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertName = new AlertDialog.Builder(AccountActivity.this);
-                final EditText editTextName1 = new EditText(AccountActivity.this);
-                alertName.setTitle("Edit your name");
 
-                alertName.setView(editTextName1);
-
-                editTextName1.setBackgroundResource(R.drawable.text_field);
-                alertName.setMessage("Enter your name");
-
-                if(user.getFull_name()!=null){
-                    editTextName1.setText(user.getFull_name());
-                }
-                alertName.setView(editTextName1);
-
-                alertName.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String s = editTextName1.getText().toString();// variable to collect user input
-                                updateUserName(s);
-                            }
-                        }
-                );
-
-                alertName.show();
-
+                showBottomSheetDialog(NAME_CODE);
             }
 
 
@@ -197,35 +178,7 @@ findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener
         findViewById(R.id.imageView13).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(RegisterActivity.TAG, currentUser.getProviderData().get(0).getProviderId());
-//                if (currentUser.getProviderData().get(0).getProviderId().equals("Phone")) {
-//                    Toast.makeText(AccountActivity.this, "You can't edit your phone number", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-                AlertDialog.Builder alertName = new AlertDialog.Builder(AccountActivity.this);
-                final EditText editTextName1 = new EditText(AccountActivity.this);
-                alertName.setTitle("Edit your Phone Number");
-
-                alertName.setView(editTextName1);
-
-                editTextName1.setBackgroundResource(R.drawable.text_field);
-                alertName.setMessage("Enter your phone number");
-                if(user.getPhone()!=null){
-                    editTextName1.setText(user.getPhone());
-                }
-
-                alertName.setView(editTextName1);
-
-                alertName.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String s = editTextName1.getText().toString();// variable to collect user input
-                                updateUserPhone(s);
-                            }
-                        }
-                );
-
-                alertName.show();
+                showBottomSheetDialog(PHONE_CODE);
 
             }
         });
@@ -233,40 +186,57 @@ findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener
         findViewById(R.id.imageView15).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(RegisterActivity.TAG, firebaseAuth.getAccessToken(false).getResult().getSignInProvider());
-//                if (firebaseAuth.getAccessToken(false).getResult().getSignInProvider().equals("password") || firebaseAuth.getAccessToken(false).getResult().getSignInProvider().equals("google.com")) {
-//                    Toast.makeText(AccountActivity.this, "You can't edit your email address", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-                AlertDialog.Builder alertName = new AlertDialog.Builder(AccountActivity.this);
-                final EditText editTextName1 = new EditText(AccountActivity.this);
-                alertName.setTitle("Edit your Email");
+                showBottomSheetDialog(EMAIL_CODE);
 
-                alertName.setView(editTextName1);
-
-                editTextName1.setBackgroundResource(R.drawable.text_field);
-                alertName.setMessage("Enter your email address");
-
-                if(user.getEmail()!=null){
-                    editTextName1.setText(user.getEmail());
-                }
-                alertName.setView(editTextName1);
-
-                alertName.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String s = editTextName1.getText().toString();// variable to collect user input
-                                updateUserEmail(s);
-                            }
-                        }
-                );
-
-                alertName.show();
             }
         });
 
     }
 
+    private void showBottomSheetDialog(int CODE) {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        //ConstraintLayout constraint = bottomSheetDialog.findViewById(R.id.constraint);
+        EditText input = bottomSheetDialog.findViewById(R.id.editTextText3);
+        Button save = bottomSheetDialog.findViewById(R.id.button5);
+        Button cancel = bottomSheetDialog.findViewById(R.id.button6);
+
+        save.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                final String value = input.getText().toString();
+                if (input.getText().toString().isEmpty()) {
+                    input.setError("Please enter value");
+                    return;
+                }
+                if (CODE == 0) {
+
+                    updateUserEmail(value);
+                }
+                if (CODE == 1) {
+                    updateUserPhone(value);
+                }
+                if (CODE == 2) {
+                    updateUserName(value);
+                }
+                bottomSheetDialog.dismiss();
+                Toast.makeText(AccountActivity.this, "Profile update Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+    }
 
     private void updateUserName(String getInput) {
 
@@ -324,6 +294,7 @@ findViewById(R.id.constraintLayout3).setOnClickListener(new View.OnClickListener
 
         }
     }
+
     private void updateUserPhone(String getInput) {
 
         if (currentUser != null) {

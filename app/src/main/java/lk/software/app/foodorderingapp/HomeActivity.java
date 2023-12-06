@@ -353,7 +353,7 @@ if(user!=null){
             startActivity(new Intent(HomeActivity.this,LoginActivity.class));
 
         }else if(itemId==R.id.sideNavLogout) {
-            Log.e(RegisterActivity.TAG,"Working logout");
+
             firebaseAuth.signOut();
             recreate();
 
