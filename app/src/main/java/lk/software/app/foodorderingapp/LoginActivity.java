@@ -202,13 +202,7 @@ firebaseFirestore= FirebaseFirestore.getInstance();
             }
         });
     }
-//    private void updateUIOneTapSignIn(FirebaseUser user) {
-//        if (user != null) {
-//
-//            startActivity(new Intent(LoginActivity.this, AccountActivity.class));
-//            finish();
-//        }
-//    }
+
     private void handleSignInResult(Intent intent) {
         try {
             SignInCredential signInCredentialFromIntent = signInClient.getSignInCredentialFromIntent(intent);

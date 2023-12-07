@@ -118,65 +118,7 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
 
         return permissions;
     }
-    private void moveCamera(LatLng latLng){
-        CameraPosition cameraPosition = CameraPosition.builder()
-                .target(latLng)
-                .zoom(20f)
-                .build();
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        googleMap.animateCamera(cameraUpdate);
-
-    }
-//    private void getLastLocation() {
-//        if(checkPermission()){
-//            Task<Location> lastLocation = fusedLocationProviderClient.getLastLocation();
-//            lastLocation.addOnSuccessListener(new OnSuccessListener<Location>() {
-//                @Override
-//                public void onSuccess(Location location) {
-//                    if(location!=null){
-//                        currentLocation = location.;
-//                        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-//                        googleMap.addMarker(new MarkerOptions().position(latLng).title("My Location"));
-//                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,20));
-//
-//                    }
-//                }
-//            });
-//        }
-//
-////        assert checkPermission();
-////
-////        //communication will drain the battery to give best accuracy location
-////        com.google.android.gms.location.LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY,7000)
-////                .setWaitForAccurateLocation(true)
-////                .setMinUpdateIntervalMillis(2000)
-////                .setMaxUpdateDelayMillis(4000)
-////                .build();
-////
-////        fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-////            @Override
-////            public void onLocationResult(@NonNull LocationResult locationResult) {
-////                super.onLocationResult(locationResult);
-////                currentLocation = locationResult.getLastLocation();
-////                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-////
-////                if(marker_current==null){
-////
-////                    MarkerOptions liveLocation = new MarkerOptions()
-////                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_location_on_24))
-////                            .title("Live Location").position(latLng);
-////                    marker_current =googleMap.addMarker(liveLocation);
-////                }else{
-////                    marker_current.setPosition(latLng);
-////                }
-////                moveCamera(latLng);
-////
-////            }
-////        }, Looper.getMainLooper());
-//
-//
-//    }
     private void getLastLocation() {
         if(checkPermission()){
             Task<Location> lastLocation = fusedLocationProviderClient.getLastLocation();

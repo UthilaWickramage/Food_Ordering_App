@@ -89,6 +89,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
                                             cartItems.remove(cartItems.get(position));
+                                            
                                             notifyDataSetChanged();
                                             CartFragment.setCartVisibility();
                                             CartFragment.calculateTotals();
