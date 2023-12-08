@@ -124,7 +124,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:itemIconTint="@drawable/bottom_nav_custom_icon"
-        app:headerLayout="@layout/side_nav_header_layout"
         app:menu="@menu/side_nav"
         app:itemIconSize="25dp"
         android:layout_gravity="start"

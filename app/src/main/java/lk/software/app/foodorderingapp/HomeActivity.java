@@ -76,16 +76,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser currentUser;
     int searchContainer;
     int fragmentContainer;
-    TextView textView;
+    TextView textView, side_name, side_email;
+    ActionBarDrawerToggle toggle;
+    ImageView imageView, side_image;
 
-    ImageView imageView;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadFragment(searchContainer, SearchFragment.getInstance());
-        loadFragment(fragmentContainer, HomeFragment.getInstance());
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        loadFragment(searchContainer, SearchFragment.getInstance());
+//        loadFragment(fragmentContainer, HomeFragment.getInstance());
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,29 +99,37 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchContainer = R.id.searchContainer;
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
-textView = findViewById(R.id.address);
+        textView = findViewById(R.id.address);
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
-if(currentUser!=null){
-    loadDeliverToDetails();
+        if (currentUser != null) {
+            loadDeliverToDetails();
 
-}else{
-    textView.setText("Select Location");
-}
-
-findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(currentUser!=null){
-            startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+        } else {
+            textView.setText("Select Location");
         }
-    }
-});
+
+        findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentUser != null) {
+                    startActivity(new Intent(HomeActivity.this, AccountActivity.class));
+                }
+            }
+        });
+
+
         imageView = findViewById(R.id.home_profile_img);
+
+        View view = getLayoutInflater().inflate(R.layout.side_nav_header_layout,navigationView,false);
+        side_image = view.findViewById(R.id.profilePic2);
+        side_name = view.findViewById(R.id.userName2);
+        side_email = view.findViewById(R.id.userEmail);
         loadProfileImage();
+        navigationView.addHeaderView(view);
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle =
+        toggle =
                 new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -148,19 +156,19 @@ findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener(
 
         });
 
-        loadFragment(searchContainer, SearchFragment.getInstance());
-        loadFragment(fragmentContainer, HomeFragment.getInstance());
+        loadFragment(searchContainer, SearchFragment.newInstance());
+        loadFragment(fragmentContainer, HomeFragment.newInstance());
         navigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setOnItemSelectedListener(this);
 
         findViewById(R.id.linearLayoutLocation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentUser!=null){
-                    startActivity(new Intent(HomeActivity.this,LocationActivity.class));
+                if (currentUser != null) {
+                    startActivity(new Intent(HomeActivity.this, LocationActivity.class));
 
-                }else{
-                    Toast.makeText(HomeActivity.this,"Login first",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Login first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,16 +181,16 @@ findViewById(R.id.home_profile_img).setOnClickListener(new View.OnClickListener(
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                       User user = documentSnapshot.toObject(User.class);
-if(user!=null){
-    textView.setText(user.getCity()+","+user.getArea());
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            textView.setText(user.getCity() + "," + user.getArea());
 
-}
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i(HomeActivity.TAG,"failed");
+                        Log.i(HomeActivity.TAG, "failed");
                     }
                 });
 
@@ -197,7 +205,12 @@ if(user!=null){
                             if (task.isSuccessful()) {
                                 User user = task.getResult().toObject(User.class);
                                 if (user != null) {
-
+                                    if (user.getFull_name() != null) {
+                                        side_name.setText(user.getFull_name());
+                                    }
+                                    if (user.getEmail() != null) {
+                                        side_email.setText(user.getEmail());
+                                    }
                                     if (user.getProfile_img() != null) {
                                         firebaseStorage.getReference("profileImages/" + user.getProfile_img()).getDownloadUrl()
                                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -206,6 +219,8 @@ if(user!=null){
                                                         Transformation transformation = new MaskTransformation(HomeActivity.this, R.drawable.profile_image_background);
                                                         Picasso.get().load(uri).transform(transformation).centerCrop()
                                                                 .resize(40, 40).into(imageView);
+                                                        Picasso.get().load(uri).transform(transformation).centerCrop()
+                                                                .resize(75, 75).into(side_image);
                                                     }
                                                 });
                                     } else {
@@ -253,10 +268,11 @@ if(user!=null){
             loadFragment(fragmentContainer, BrowseFragment.getInstance());
             loadFragment(searchContainer, SearchFragment.getInstance());
         } else if (itemId == R.id.bottomNavCart) {
-            if(currentUser!=null){
+            if (currentUser != null) {
                 loadFragment(fragmentContainer, CartFragment.getInstance());
                 removeFragment(SearchFragment.getInstance());
-            }else{
+
+            } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                 alertDialog.setTitle("Go to Login?");
                 alertDialog.setMessage("You need to login to create a cart");
@@ -270,9 +286,11 @@ if(user!=null){
             }
 
         } else if (itemId == R.id.bottomNavProfile) {
-            if(currentUser!=null){
-                startActivity(new Intent(HomeActivity.this, AccountActivity.class));
-            }else{
+            if (currentUser != null) {
+                Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
+                startActivity(intent);
+
+            } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                 alertDialog.setTitle("Go to Login?");
                 alertDialog.setMessage("You need to login to view your account");
@@ -288,22 +306,24 @@ if(user!=null){
 
         } else {
             loadFragment(fragmentContainer, HomeFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.getInstance());
+            loadFragment(searchContainer, SearchFragment.newInstance());
         }
-
 
 
         if (itemId == R.id.sideNavHome) {
             loadFragment(fragmentContainer, HomeFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.getInstance());
+            loadFragment(searchContainer, SearchFragment.newInstance());
+
         } else if (itemId == R.id.sideNavBrowseProduct) {
             loadFragment(fragmentContainer, BrowseFragment.getInstance());
             loadFragment(searchContainer, SearchFragment.getInstance());
+
         } else if (itemId == R.id.sideNavCart) {
-            if(currentUser!=null){
+            if (currentUser != null) {
                 loadFragment(fragmentContainer, CartFragment.getInstance());
                 removeFragment(SearchFragment.getInstance());
-            }else{
+
+            } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                 alertDialog.setTitle("Go to Login?");
                 alertDialog.setMessage("You need to login to create a cart");
@@ -317,10 +337,10 @@ if(user!=null){
             }
 
         } else if (itemId == R.id.sideNavOrder) {
-            if(currentUser!=null){
-                startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+            if (currentUser != null) {
+                startActivity(new Intent(HomeActivity.this, AccountActivity.class));
 
-            }else{
+            } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                 alertDialog.setTitle("Go to Login?");
                 alertDialog.setMessage("You need to login to view your orders");
@@ -334,10 +354,12 @@ if(user!=null){
             }
 
         } else if (itemId == R.id.sideNavAccount) {
-            if(currentUser!=null){
-                startActivity(new Intent(HomeActivity.this,AccountActivity.class));
+            if (currentUser != null) {
+                Intent intent = new Intent(HomeActivity.this, AccountActivity.class);
 
-            }else{
+                startActivity(intent);
+
+            } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                 alertDialog.setTitle("Go to Login?");
                 alertDialog.setMessage("You need to login to view your account");
@@ -349,10 +371,10 @@ if(user!=null){
                 });
                 alertDialog.show();
             }
-        } else if(itemId==R.id.sideNavLogin) {
-            startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+        } else if (itemId == R.id.sideNavLogin) {
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
 
-        }else if(itemId==R.id.sideNavLogout) {
+        } else if (itemId == R.id.sideNavLogout) {
 
             firebaseAuth.signOut();
             recreate();

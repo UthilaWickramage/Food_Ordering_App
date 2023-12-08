@@ -37,6 +37,7 @@ import lk.software.app.foodorderingapp.HomeActivity;
 import lk.software.app.foodorderingapp.R;
 import lk.software.app.foodorderingapp.RegisterActivity;
 import lk.software.app.foodorderingapp.model.User;
+import lk.software.app.foodorderingapp.model.UserStatusEnum;
 
 public class RegisterEmailFragment extends Fragment {
     private static RegisterEmailFragment registerEmailFragment;
@@ -149,6 +150,7 @@ public class RegisterEmailFragment extends Fragment {
                                                                 newUser.setEmail(person_email);
                                                                 newUser.setRegister_date(saveCurrentDate);
                                                                 newUser.setRegister_time(saveCurrentTime);
+                                                                newUser.setStatus(UserStatusEnum.UNBLOCKED.toString());
 
                                                                 firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
                                                                         .addOnFailureListener(new OnFailureListener() {

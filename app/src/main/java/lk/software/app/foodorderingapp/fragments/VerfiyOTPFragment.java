@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import lk.software.app.foodorderingapp.R;
 import lk.software.app.foodorderingapp.model.User;
+import lk.software.app.foodorderingapp.model.UserStatusEnum;
 import lk.software.app.foodorderingapp.receivers.OTPReceiver;
 
 public class VerfiyOTPFragment extends Fragment {
@@ -126,8 +127,10 @@ public class VerfiyOTPFragment extends Fragment {
                                                         newUser.setPhone(phoneNumber);
                                                         newUser.setRegister_date(saveCurrentDate);
                                                         newUser.setRegister_time(saveCurrentTime);
-
+                                                        newUser.setStatus(UserStatusEnum.UNBLOCKED.toString());
+                                                        verifyOTPFragmentListener.updateUItoHome(currentUser);
                                                         firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
+
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
@@ -135,13 +138,23 @@ public class VerfiyOTPFragment extends Fragment {
 
                                                                     }
                                                                 });
+                                                    }else{
+                                                        if(user.getStatus()!=null){
+                                                            if(user.getStatus().equals(UserStatusEnum.BLOCKED.toString())){
+                                                                Toast.makeText(requireContext(),"Your account is suspended",Toast.LENGTH_SHORT).show();
+
+                                                            }else{
+                                                                verifyOTPFragmentListener.updateUItoHome(currentUser);
+
+                                                            }
+                                                        }
                                                     }
                                                 }
 
                                             }
                                         });
                             }
-                            verifyOTPFragmentListener.updateUItoHome(currentUser);
+
                         }
 
                     }

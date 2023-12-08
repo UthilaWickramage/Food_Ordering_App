@@ -52,6 +52,10 @@ public interface HomeFragmentListener{
     public HomeFragment() {
         // Required empty public constructor
     }
+    public static HomeFragment newInstance() {
+        HomeFragment fragment = new HomeFragment();
+        return fragment;
+    }
 
     public static HomeFragment getInstance() {
         if(homeFragment==null){

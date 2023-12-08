@@ -35,7 +35,7 @@ public interface SearchFragmentListener{
     }
 
 
-    public static SearchFragment newInstance(String param1, String param2) {
+    public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         return fragment;
     }

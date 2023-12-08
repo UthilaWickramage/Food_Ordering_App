@@ -98,6 +98,13 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.imageView2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+
+            }
+        });
         profile_img = findViewById(R.id.imageView4);
         profile_img.setOnClickListener(new View.OnClickListener() {
             @Override

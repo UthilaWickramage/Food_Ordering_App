@@ -161,8 +161,8 @@ firebaseFirestore= FirebaseFirestore.getInstance();
                                     Toast.makeText(LoginActivity.this,"You account is suspended",Toast.LENGTH_LONG).show();
 
                                 }else{
-                                    Intent intent = new Intent(LoginActivity.this, AccountActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
 

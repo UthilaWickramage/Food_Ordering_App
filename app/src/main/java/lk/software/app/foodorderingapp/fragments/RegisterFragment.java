@@ -53,6 +53,7 @@ import java.util.UUID;
 import lk.software.app.foodorderingapp.R;
 import lk.software.app.foodorderingapp.RegisterActivity;
 import lk.software.app.foodorderingapp.model.User;
+import lk.software.app.foodorderingapp.model.UserStatusEnum;
 
 public class RegisterFragment extends Fragment {
     FirebaseFirestore firebaseFirestore;
@@ -111,7 +112,10 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onSuccess(PendingIntent pendingIntent) {
                         IntentSenderRequest intentSenderRequest = new IntentSenderRequest.Builder(pendingIntent).build();
-                        signResultLauncher.launch(intentSenderRequest);
+                        if(signResultLauncher!=null){
+                            signResultLauncher.launch(intentSenderRequest);
+
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -177,7 +181,8 @@ public class RegisterFragment extends Fragment {
                                                 newUser.setFull_name(person_name);
                                                 newUser.setRegister_date(saveCurrentDate);
                                                 newUser.setRegister_time(saveCurrentTime);
-
+                                                newUser.setStatus(UserStatusEnum.UNBLOCKED.toString());
+                                                listener.updateUIFromGoogleSignInToHome(currentUser);
                                                 firebaseFirestore.collection("customers").document(currentUser.getUid()).set(newUser)
 
                                                         .addOnFailureListener(new OnFailureListener() {
@@ -187,6 +192,16 @@ public class RegisterFragment extends Fragment {
 
                                                             }
                                                         });
+                                            }else{
+                                                if(user.getStatus()!=null){
+                                                    if(user.getStatus().equals(UserStatusEnum.BLOCKED.toString())){
+                                                        Toast.makeText(requireContext(),"Your account is suspended",Toast.LENGTH_SHORT).show();
+
+                                                    }else{
+                                                        listener.updateUIFromGoogleSignInToHome(currentUser);
+
+                                                    }
+                                                }
                                             }
                                         }
 
@@ -201,7 +216,7 @@ public class RegisterFragment extends Fragment {
                     }else {
                         Toast.makeText(requireContext(),"No user",Toast.LENGTH_SHORT).show();
                     }
-                    listener.updateUIFromGoogleSignInToHome(currentUser);
+
 
                 }
 

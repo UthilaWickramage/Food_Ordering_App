@@ -10,7 +10,9 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+
 import com.google.android.gms.location.LocationRequest;
+
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -58,19 +60,20 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap googleMap;
-FirebaseFirestore firebaseFirestore;
-FirebaseUser currentUser;
-private ArrayList<String> addressData;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseUser currentUser;
+    private ArrayList<String> addressData;
 
-TextView address,area,city;
+    TextView address, area, city;
     private Marker marker_current;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         addressData = new ArrayList<>();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -79,13 +82,14 @@ firebaseFirestore = FirebaseFirestore.getInstance();
         area = findViewById(R.id.textView37);
         city = findViewById(R.id.textView38);
 
-findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        finish();
+        findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
-});
-    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         this.googleMap = map;
@@ -105,6 +109,7 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
             );
         }
     }
+
     private boolean checkPermission() {
         boolean permissions = false;
         // if checks with gps its fine location permission and coarse location is for tower system
@@ -120,17 +125,17 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
     }
 
     private void getLastLocation() {
-        if(checkPermission()){
+        if (checkPermission()) {
             Task<Location> lastLocation = fusedLocationProviderClient.getLastLocation();
             lastLocation.addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    if(location!=null){
+                    if (location != null) {
                         currentLocation = location;
-                        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(latLng).title("My Location"));
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,20));
-                        saveLocation(currentLocation.getLatitude(),currentLocation.getLongitude());
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
+                        saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
                     }
                 }
             });
@@ -138,11 +143,10 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
         }
 
 
-
     }
 
     private void saveLocation(double latitude, double longitude) {
-        findAddress(getApplicationContext(),latitude,longitude);
+        findAddress(getApplicationContext(), latitude, longitude);
 
         if (currentUser != null) {
 
@@ -158,17 +162,17 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
                                     user.setLongitude(String.valueOf(longitude));
 
                                     findAddress(LocationActivity.this, latitude, longitude);
-                                    if(!addressData.isEmpty()){
+                                    if (!addressData.isEmpty()) {
                                         user.setAddress(addressData.get(0));
                                         user.setArea(addressData.get(1));
                                         user.setCity(addressData.get(2));
                                         user.setPostal_code(addressData.get(3));
-                                        Log.i("addressData",addressData.get(0));
+                                        Log.i("addressData", addressData.get(0));
                                         address.setText(addressData.get(0));
                                         area.setText(addressData.get(3));
                                         city.setText(addressData.get(1));
-                                    }else{
-                                        Log.i("empty","empty");
+                                    } else {
+                                        Log.i("empty", "empty");
                                     }
 
                                     updateUser(user);
@@ -185,7 +189,7 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(getApplicationContext(),"address details saved successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "address details saved successfully", Toast.LENGTH_SHORT).show();
 
 
                         finish();
@@ -213,23 +217,23 @@ findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
                     addressData.add(locality);
                     addressData.add(postalCode);
 
-                    Log.d("address",address);
+                    Log.d("address", address);
 
-                    Log.d("address",postalCode);
+                    Log.d("address", postalCode);
 
-                    Log.d("subarea",subarea);
+                    Log.d("subarea", subarea);
 
-                    Log.d("locality",locality);
+                    Log.d("locality", locality);
 
                 }
             });
 
 
-        }else{
+        } else {
 
         }
-        if(addressData.isEmpty()){
-            Log.i("before return","empty");
+        if (addressData.isEmpty()) {
+            Log.i("before return", "empty");
 
         }
 
