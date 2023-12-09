@@ -6,30 +6,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainer;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,17 +37,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import java.util.List;
-
 import jp.wasabeef.picasso.transformations.MaskTransformation;
 import lk.software.app.foodorderingapp.adapters.CategoryAdapter;
-import lk.software.app.foodorderingapp.fragments.AccountFragment;
 import lk.software.app.foodorderingapp.fragments.BrowseFragment;
 import lk.software.app.foodorderingapp.fragments.CartFragment;
 import lk.software.app.foodorderingapp.fragments.HomeFragment;
 import lk.software.app.foodorderingapp.fragments.SearchFragment;
-import lk.software.app.foodorderingapp.model.Category;
-import lk.software.app.foodorderingapp.model.Product;
 import lk.software.app.foodorderingapp.model.User;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NavigationBarView.OnItemSelectedListener, SearchFragment.SearchFragmentListener, CategoryAdapter.AdapterListener {
@@ -244,17 +226,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
     FragmentManager supportFragmentManager = getSupportFragmentManager();
+
     private void loadFragment(int fragmentContainerView, Fragment
             fragment) {
-
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+
         fragmentTransaction.replace(fragmentContainerView, fragment);
         fragmentTransaction.commit();
     }
 
     private void removeFragment(Fragment fragment) {
-
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
     }

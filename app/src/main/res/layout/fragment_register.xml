@@ -24,7 +24,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
 
-            android:text="Sign Up With Email"
+            android:text="@string/sign_up_with_email"
 
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -42,7 +42,7 @@
             android:elevation="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Sign Up With Phone"
+            android:text="@string/sign_up_with_phone"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/signup_btn_email"
@@ -64,7 +64,7 @@
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-            android:text="Sign Up With Google"
+            android:text="@string/sign_up_with_google"
 
             android:textColor="@color/black"
             android:textSize="18sp"

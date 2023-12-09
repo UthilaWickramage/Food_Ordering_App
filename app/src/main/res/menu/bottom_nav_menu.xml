@@ -4,19 +4,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/bottomNavHome"
 
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@drawable/baseline_home_24"
         />
     <item android:id="@+id/bottomNavBrowsing"
-        android:title="Browse"
+        android:title="@string/browse"
         android:icon="@drawable/baseline_search_24"
         />
     <item android:id="@+id/bottomNavCart"
-        android:title="Cart"
+        android:title="@string/cart"
         android:icon="@drawable/baseline_shopping_cart_24"
         />
     <item android:id="@+id/bottomNavProfile"
-        android:title="Account"
+        android:title="@string/account"
         android:icon="@drawable/baseline_person_24"
         />
 

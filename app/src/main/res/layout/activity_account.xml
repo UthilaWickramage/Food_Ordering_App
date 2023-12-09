@@ -32,7 +32,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="16dp"
-               android:text="My Account"
+               android:text="@string/my_account"
                android:textSize="22sp"
                android:textStyle="bold"
                app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
                android:layout_width="200dp"
                android:layout_height="wrap_content"
                android:layout_marginTop="32dp"
-               android:text="Uthila Wickramage"
+               android:text="@string/uthila_wickramage"
                android:textSize="30sp"
                android:textStyle="bold"
                app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -82,7 +82,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginStart="16dp"
-                   android:text="My Delivery Location"
+                   android:text="@string/my_delivery_location"
                    android:textSize="16sp"
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +92,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginTop="4dp"
-                   android:text="Maharagama, Colombo"
+                   android:text="@string/maharagama_colombo"
                    app:layout_constraintStart_toStartOf="@+id/textView31"
                    app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
@@ -115,7 +115,7 @@
                    android:backgroundTint="@color/black"
                    android:paddingTop="3dp"
                    android:paddingBottom="3dp"
-                   android:text="View Location"
+                   android:text="@string/view_location"
                    android:textAllCaps="false"
                    android:textColor="@color/white"
                    android:textSize="12sp"
@@ -157,7 +157,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginTop="8dp"
-                       android:text="My Orders"
+                       android:text="@string/my_orders"
                        android:textSize="16sp"
                        app:layout_constraintEnd_toEndOf="parent"
                        app:layout_constraintStart_toStartOf="parent"
@@ -196,7 +196,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginTop="8dp"
-                       android:text="My Cart"
+                       android:text="@string/my_cart"
                        android:textSize="16sp"
                        app:layout_constraintEnd_toEndOf="parent"
                        app:layout_constraintStart_toStartOf="parent"
@@ -219,7 +219,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="16dp"
-               android:text="Manage your account"
+               android:text="@string/manage_your_account"
                android:textSize="20sp"
                android:textStyle="bold"
                app:layout_constraintStart_toStartOf="@+id/gridLayout"
@@ -254,7 +254,7 @@
                            android:layout_gravity="center_vertical"
                            android:gravity="center_vertical"
                            android:paddingStart="5dp"
-                           android:text="Full Name"
+                           android:text="@string/full_name"
                            android:textSize="18sp"
                            android:textStyle="bold" />
 
@@ -275,7 +275,7 @@
                        android:layout_weight="1"
                        android:gravity="center_vertical"
                        android:paddingStart="5dp"
-                       android:text="Your name"
+                       android:text="@string/your_name"
                        android:textSize="18sp" />
                </LinearLayout>
 
@@ -302,7 +302,7 @@
                            android:layout_gravity="center_vertical"
                            android:gravity="center_vertical"
                            android:paddingStart="5dp"
-                           android:text="Phone Number"
+                           android:text="@string/phone_number"
                            android:textSize="18sp"
                            android:textStyle="bold" />
 
@@ -322,7 +322,7 @@
                        android:layout_weight="1"
                        android:gravity="center_vertical"
                        android:paddingStart="5dp"
-                       android:text="Your phone"
+                       android:text="@string/your_phone"
                        android:textSize="18sp" />
                </LinearLayout>
 
@@ -349,7 +349,7 @@
                            android:layout_height="wrap_content"
                            android:gravity="center_vertical"
                            android:paddingStart="5dp"
-                           android:text="Email Address"
+                           android:text="@string/email_address"
                            android:textSize="18sp"
                            android:textStyle="bold" />
 
@@ -368,7 +368,7 @@
                        android:layout_weight="1"
                        android:gravity="center_vertical"
                        android:paddingStart="5dp"
-                       android:text="Your email"
+                       android:text="@string/your_email"
                        android:textSize="18sp" />
                </LinearLayout>
            </LinearLayout>

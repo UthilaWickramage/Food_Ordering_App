@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Description"
+                android:text="@string/description"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/nameSingle"
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Quantity Order"
+                android:text="@string/quantity_order"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/nameSingle"
@@ -130,7 +130,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_bg"
-                android:text="Add to Order"
+                android:text="@string/add_to_order"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -234,7 +234,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:gravity="center"
-                            android:text="Delivery"
+                            android:text="@string/delivery"
                             app:layout_constraintStart_toStartOf="@+id/clockImage"
                             app:layout_constraintTop_toBottomOf="@+id/clockImage" />
 
@@ -243,7 +243,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="min"
+                            android:text="@string/min"
                             app:layout_constraintBottom_toBottomOf="@+id/prepareTime"
                             app:layout_constraintStart_toEndOf="@+id/prepareTime"
                             app:layout_constraintTop_toTopOf="@+id/prepareTime" />
@@ -282,7 +282,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:gravity="center"
-                            android:text="Rating"
+                            android:text="@string/rating"
                             app:layout_constraintEnd_toEndOf="@+id/product_rating"
                             app:layout_constraintStart_toStartOf="@+id/imageView12"
                             app:layout_constraintTop_toBottomOf="@+id/imageView12" />
@@ -319,7 +319,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="Serving"
+                            android:text="@string/serving"
                             app:layout_constraintStart_toStartOf="@+id/personImage"
                             app:layout_constraintTop_toBottomOf="@+id/personImage" />
 
@@ -328,7 +328,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="Person"
+                            android:text="@string/person"
                             app:layout_constraintBottom_toBottomOf="@+id/person_per_serve"
                             app:layout_constraintStart_toEndOf="@+id/person_per_serve"
                             app:layout_constraintTop_toTopOf="@+id/person_per_serve" />

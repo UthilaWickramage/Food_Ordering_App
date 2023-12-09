@@ -13,7 +13,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contact Us"
+        android:text="@string/contact_us"
         android:textColor="#FFB300"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Call Now"
+        android:text="@string/call_now"
         android:backgroundTint="#FDD835"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
