@@ -92,7 +92,8 @@ public interface HomeFragmentListener{
         productRecycleView.setAdapter(productAdapter);
 
         FrameLayout frameLayout = view.findViewById(R.id.frameLayout);
-        getLayoutInflater().inflate(R.layout.home_banner,frameLayout,true);
+        frameLayout.setBackgroundResource(R.mipmap.ad);
+        //getLayoutInflater().inflate(R.layout.home_banner,frameLayout,true);
     }
 
     @Override

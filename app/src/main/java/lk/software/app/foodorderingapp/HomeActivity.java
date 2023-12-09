@@ -243,17 +243,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-
+    FragmentManager supportFragmentManager = getSupportFragmentManager();
     private void loadFragment(int fragmentContainerView, Fragment
             fragment) {
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
+
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.replace(fragmentContainerView, fragment);
         fragmentTransaction.commit();
     }
 
     private void removeFragment(Fragment fragment) {
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
+
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
@@ -263,14 +263,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-
+BrowseFragment browseFragment =BrowseFragment.getInstance();
+        SearchFragment searchFragment = SearchFragment.getInstance();
+                HomeFragment homeFragment = HomeFragment.newInstance();
+            CartFragment cartFragment = CartFragment.getInstance();
         if (itemId == R.id.bottomNavBrowsing) {
-            loadFragment(fragmentContainer, BrowseFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.getInstance());
+            loadFragment(fragmentContainer, browseFragment);
+            loadFragment(searchContainer, searchFragment);
         } else if (itemId == R.id.bottomNavCart) {
             if (currentUser != null) {
-                loadFragment(fragmentContainer, CartFragment.getInstance());
-                removeFragment(SearchFragment.getInstance());
+                loadFragment(fragmentContainer, cartFragment);
+                removeFragment(searchFragment);
 
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
@@ -305,23 +308,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         } else {
-            loadFragment(fragmentContainer, HomeFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.newInstance());
+            loadFragment(fragmentContainer, homeFragment);
+            loadFragment(searchContainer, searchFragment);
         }
 
 
         if (itemId == R.id.sideNavHome) {
-            loadFragment(fragmentContainer, HomeFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.newInstance());
+            loadFragment(fragmentContainer, homeFragment);
+            loadFragment(searchContainer, searchFragment);
 
         } else if (itemId == R.id.sideNavBrowseProduct) {
-            loadFragment(fragmentContainer, BrowseFragment.getInstance());
-            loadFragment(searchContainer, SearchFragment.getInstance());
+            loadFragment(fragmentContainer, browseFragment);
+            loadFragment(searchContainer, searchFragment);
 
         } else if (itemId == R.id.sideNavCart) {
             if (currentUser != null) {
-                loadFragment(fragmentContainer, CartFragment.getInstance());
-                removeFragment(SearchFragment.getInstance());
+                loadFragment(fragmentContainer, cartFragment);
+                removeFragment(searchFragment);
 
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
