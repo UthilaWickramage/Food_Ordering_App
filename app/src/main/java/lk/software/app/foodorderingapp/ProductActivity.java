@@ -1,6 +1,7 @@
 package lk.software.app.foodorderingapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +19,20 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import lk.software.app.foodorderingapp.model.Cart_Item;
 import lk.software.app.foodorderingapp.model.Product;
+import lk.software.app.foodorderingapp.model.Rating;
 
 public class ProductActivity extends AppCompatActivity {
     public static final String TAG = ProductActivity.class.getName();
@@ -51,6 +57,7 @@ private FirebaseAuth firebaseAuth;
         }
 
 
+
         Log.d(TAG, product.getCategory_name());
         TextView name = findViewById(R.id.nameSingle);
         TextView category = findViewById(R.id.categorySingle);
@@ -67,9 +74,38 @@ private FirebaseAuth firebaseAuth;
         category.setText(product.getCategory_name());
         price.setText("Rs." + price_formatted);
         prepare_time.setText(String.valueOf(product.getPrepare_time()));
-        rating.setText(String.valueOf(product.getRating()));
+
         person_per_serve.setText(String.valueOf(product.getPerson_per_serve()));
         description.setText(product.getDescription());
+
+        firebaseFirestore.collection("ratings").document(product.getProductDocumentId())
+                .collection("ratingByUsers").get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                           int count = 0;
+                           double totalRating = 0;
+                                   double avg = 0;
+
+                           for(DocumentSnapshot snapshot:queryDocumentSnapshots){
+                               Rating rating1 = snapshot.toObject(Rating.class);
+                               if(rating1!=null){
+                                   double productRating = rating1.getRating();
+                                   count++;
+                                   totalRating = totalRating+productRating;
+                                   avg = totalRating/count;
+
+                               }else{
+                                   rating.setText(String.valueOf(avg));
+                               }
+
+
+                           }
+
+                                rating.setText(String.valueOf(avg));
+                            }
+                        });
+
 
         firebaseStorage.getReference("productImages/" + product.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -82,6 +118,37 @@ private FirebaseAuth firebaseAuth;
 
 
         Log.d(TAG, product.getImage());
+
+        findViewById(R.id.ratingBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(firebaseAuth.getCurrentUser()!=null){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductActivity.this);
+                    View inflate = getLayoutInflater().inflate(R.layout.rating_layout, null, false);
+                    alertDialog.setView(inflate);
+                    alertDialog.setTitle("Rate this food");
+                    alertDialog.setMessage("How would you rate this food?");
+
+                    alertDialog.setPositiveButton("Submit",(dialog, which) -> {
+                        RatingBar ratingBar = inflate.findViewById(R.id.ratingBar2);
+                        HashMap<String, Float> map = new HashMap<>();
+                        map.put("rating",ratingBar.getRating());
+                        firebaseFirestore.collection("ratings").document(product.getProductDocumentId()).collection("ratingByUsers").document(firebaseAuth.getCurrentUser().getUid()).set(map)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getApplicationContext(),"Thank you for your rating",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    });
+                    alertDialog.show();
+                }else {
+                    Toast.makeText(getApplicationContext(),"You need to login to rate",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
         findViewById(R.id.imageView8).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

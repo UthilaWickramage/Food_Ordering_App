@@ -62,4 +62,6 @@ dependencies {
     //for location api
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.android.gms:play-services-location-license:12.0.1'
+
+
 }

@@ -27,6 +27,7 @@ import java.util.List;
 
 import lk.software.app.foodorderingapp.HomeActivity;
 import lk.software.app.foodorderingapp.R;
+import lk.software.app.foodorderingapp.adapters.BannerAdapter;
 import lk.software.app.foodorderingapp.adapters.CategoryAdapter;
 import lk.software.app.foodorderingapp.adapters.ProductAdapter;
 import lk.software.app.foodorderingapp.model.Category;
@@ -91,8 +92,17 @@ public interface HomeFragmentListener{
         productRecycleView.setLayoutManager(newProductLayoutManager);
         productRecycleView.setAdapter(productAdapter);
 
-        FrameLayout frameLayout = view.findViewById(R.id.frameLayout);
-        frameLayout.setBackgroundResource(R.mipmap.ad);
+
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        arrayList.add(R.mipmap.ad);
+        arrayList.add(R.mipmap.ad2);
+        arrayList.add(R.mipmap.ad3);
+        RecyclerView bannerRecycler = view.findViewById(R.id.bannerRecycler);
+        BannerAdapter bannerAdapter = new BannerAdapter(requireContext(),arrayList);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(requireContext());
+        layoutManager1.setOrientation(RecyclerView.HORIZONTAL);
+        bannerRecycler.setLayoutManager(layoutManager1);
+        bannerRecycler.setAdapter(bannerAdapter);
         //getLayoutInflater().inflate(R.layout.home_banner,frameLayout,true);
     }
 
@@ -129,6 +139,7 @@ firebaseFirestore.collection("categories")
                         products.clear();
                         for(DocumentSnapshot snapshot: value.getDocuments()){
                             Product product = snapshot.toObject(Product.class);
+                            product.setProductDocumentId(snapshot.getId());
                             products.add(product);
                         }
                         productAdapter.notifyDataSetChanged();

@@ -18,7 +18,7 @@ private String category_name;
     private int prepare_time;
     private String image;
 
-
+private String productDocumentId;
 
     public Product(int id, String name, double price, double rating, String description, String category_name,int person_per_serve, int prepare_time, String image) {
         this.id = id;
@@ -105,6 +105,11 @@ private String category_name;
         this.image = image;
     }
 
+    public String getProductDocumentId() {
+        return productDocumentId;
+    }
 
-
+    public void setProductDocumentId(String productDocumentId) {
+        this.productDocumentId = productDocumentId;
+    }
 }

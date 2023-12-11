@@ -98,6 +98,7 @@ private String searchText = "";
                         products.clear();
                         for (DocumentSnapshot snapshot : value.getDocuments()) {
                             Product product = snapshot.toObject(Product.class);
+                            product.setProductDocumentId(snapshot.getId());
                             products.add(product);
                         }
                         productAdapter.notifyDataSetChanged();
