@@ -165,7 +165,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         User user = documentSnapshot.toObject(User.class);
                         if (user != null) {
-                            textView.setText(user.getCity() + "," + user.getArea());
+                            if(user.getCity()!=null&&user.getArea()!=null){
+                                textView.setText(user.getCity() + "," + user.getArea());
+                            }else{
+                                textView.setText("Select Location");
+                            }
 
                         }
                     }

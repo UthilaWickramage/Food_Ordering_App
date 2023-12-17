@@ -13,11 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+
 import lk.software.app.foodorderingapp.R;
+import lk.software.app.foodorderingapp.model.Category;
+import lk.software.app.foodorderingapp.model.Product;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +40,8 @@ import lk.software.app.foodorderingapp.R;
  */
 public class SearchFragment extends Fragment {
 private static SearchFragment searchFragment;
+FirebaseFirestore firebaseFirestore;
+ArrayList<String> arrayList;
 private static SearchFragmentListener searchFragmentListener;
 public interface SearchFragmentListener{
     void passSearchText(String searchText);
@@ -49,12 +65,46 @@ public interface SearchFragmentListener{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        EditText editText = view.findViewById(R.id.editTextText);
+    firebaseFirestore = FirebaseFirestore.getInstance();
+        AutoCompleteTextView editText = view.findViewById(R.id.editTextText);
+        arrayList = new ArrayList<>();
+        arrayList.clear();
+        firebaseFirestore.collection("products")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        for(DocumentSnapshot snapshot: value.getDocuments()){
+                            Product product = snapshot.toObject(Product.class);
+
+                            arrayList.add(product.getName());
+                        }
+
+                    }
+                });
+        firebaseFirestore.collection("categories")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        for(DocumentSnapshot snapshot: value.getDocuments()){
+                            Category category = snapshot.toObject(Category.class);
+
+                            arrayList.add(category.getName());
+                        }
+
+                    }
+                });
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line,arrayList);
+     editText.setAdapter(arrayAdapter);
+editText.setThreshold(1);
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId== EditorInfo.IME_ACTION_SEARCH){
-                    Toast.makeText(requireActivity(),"Searching",Toast.LENGTH_SHORT).show();
+
                     String searchText = editText.getText().toString();
                    searchFragmentListener.passSearchText(searchText);
                     return true;

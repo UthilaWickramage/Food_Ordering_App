@@ -152,8 +152,6 @@ private FirebaseAuth firebaseAuth;
         findViewById(R.id.imageView8).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(ProductActivity.this, HomeActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });
@@ -188,6 +186,10 @@ private FirebaseAuth firebaseAuth;
         findViewById(R.id.addToOrderBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(firebaseAuth.getCurrentUser()==null){
+                    Toast.makeText(ProductActivity.this,"You need to login first",Toast.LENGTH_SHORT).show();
+                return;
+                }
                 String saveCurrentTime, saveCurrentDate;
                 Calendar calendar = Calendar.getInstance();
 

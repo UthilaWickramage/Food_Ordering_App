@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -69,10 +71,11 @@ private String searchText = "";
         RecyclerView productRecycleView = view.findViewById(R.id.recyclerViewBrowseProducts);
         products = new ArrayList<>();
         if(!this.searchText.isEmpty()){
-            loadProductsWithCondition();
+            loadProductsWithCondition(view);
         }else{
             loadProducts();
         }
+
         productAdapter = new ProductAdapter(requireActivity().getApplicationContext(), firebaseStorage, products);
         GridLayoutManager productGridLayoutManger = new GridLayoutManager(requireActivity().getApplicationContext(), 2);
         Log.d(TAG, String.valueOf(requireActivity().getApplicationContext()));
@@ -105,7 +108,7 @@ private String searchText = "";
                     }
                 });
     }
-    public void loadProductsWithCondition() {
+    public void loadProductsWithCondition(View view) {
         CollectionReference collectionReference = firebaseFirestore.collection("products");
        collectionReference.where(Filter.or(
                Filter.equalTo("category_name",searchText),
@@ -115,9 +118,17 @@ private String searchText = "";
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         products.clear();
-                        for (DocumentSnapshot snapshot : value.getDocuments()) {
-                            Product product = snapshot.toObject(Product.class);
-                            products.add(product);
+                        if(!value.getDocuments().isEmpty()){
+                            for (DocumentSnapshot snapshot : value.getDocuments()) {
+                                Product product = snapshot.toObject(Product.class);
+                                product.setProductDocumentId(snapshot.getId());
+                                products.add(product);
+                            }
+                        }else{
+                            LottieAnimationView lottieAnimationView = view.findViewById(R.id.lottie);
+
+                            lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+                        lottieAnimationView.setVisibility(View.VISIBLE);
                         }
                         productAdapter.notifyDataSetChanged();
                     }

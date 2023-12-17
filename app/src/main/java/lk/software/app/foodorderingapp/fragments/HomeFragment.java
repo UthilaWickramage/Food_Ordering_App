@@ -94,8 +94,8 @@ public interface HomeFragmentListener{
 
 
         ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(R.mipmap.ad);
         arrayList.add(R.mipmap.ad2);
+        arrayList.add(R.mipmap.ad);
         arrayList.add(R.mipmap.ad3);
         RecyclerView bannerRecycler = view.findViewById(R.id.bannerRecycler);
         BannerAdapter bannerAdapter = new BannerAdapter(requireContext(),arrayList);

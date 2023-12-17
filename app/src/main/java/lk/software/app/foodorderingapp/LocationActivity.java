@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -162,21 +163,36 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                                     user.setLongitude(String.valueOf(longitude));
 
                                     findAddress(LocationActivity.this, latitude, longitude);
+
+
                                     if (!addressData.isEmpty()) {
-                                        user.setAddress(addressData.get(0));
-                                        user.setArea(addressData.get(1));
-                                        user.setCity(addressData.get(2));
-                                        user.setPostal_code(addressData.get(3));
-                                        Log.i("addressData", addressData.get(0));
-                                        address.setText(addressData.get(0));
-                                        area.setText(addressData.get(3));
-                                        city.setText(addressData.get(1));
+
+                                            user.setAddress(addressData.get(0));
+                                            user.setArea(addressData.get(1));
+                                            user.setCity(addressData.get(2));
+                                            user.setPostal_code(addressData.get(3));
+                                            Log.i("addressData", addressData.get(0));
+                                            address.setText(addressData.get(0));
+                                            area.setText(addressData.get(3));
+                                            city.setText(addressData.get(1));
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        updateUser(user);
+
                                     } else {
                                         Log.i("empty", "empty");
                                     }
 
-                                    updateUser(user);
+
                                 }
+
+
+
+
+
                             }
 
                         }
@@ -192,9 +208,15 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         Toast.makeText(getApplicationContext(), "address details saved successfully", Toast.LENGTH_SHORT).show();
 
 
-                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+        finish();
     }
 
 

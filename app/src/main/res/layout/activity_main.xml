@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-
     tools:context=".MainActivity">
 
 
@@ -20,6 +19,7 @@
         android:text="@string/food_ordering_app"
         android:textColor="@color/black"
         android:textSize="54sp"
+        android:fontFamily="@font/raleway_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +36,7 @@
         android:text="@string/get_started"
         android:textColor="#000"
         android:textSize="24sp"
+        android:fontFamily="@font/raleway_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -51,6 +52,7 @@
         android:text="@string/hi_welcome_to_our_app_let_s_get_your_first_order"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:fontFamily="@font/raleway_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lottie" />

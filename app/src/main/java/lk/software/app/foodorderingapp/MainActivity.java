@@ -22,28 +22,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         LottieAnimationView lottieAnimationView = findViewById(R.id.lottie);
         lottieAnimationView.animate().translationX(0).setDuration(5000);
-lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+        lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+
 
         TextView textView = findViewById(R.id.textView);
 
-////        ImageView imageView = findViewById(R.id.imageView);
-//        CardView cardView = findViewById(R.id.cardView);
 
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        //        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Animation animation2;
 
-//        Animation animation1 = AnimationUtils.loadAnimation(MainActivity.this, R.anim.intro_anim);
- Animation animation2 = AnimationUtils.loadAnimation(MainActivity.this, R.anim.intro_anim2);
-//        animation1.setRepeatCount(Animation.INFINITE);
-//        animation1.setInterpolator(new LinearInterpolator());
-//        animation1.setDuration(30000);
- animation2.setDuration(3500);
- animation2.setFillAfter(true);
-//
-//        imageView.startAnimation(animation1);
- textView.startAnimation(animation2);
+        animation2 = AnimationUtils.loadAnimation(MainActivity.this, R.anim.intro_anim2);
+
+        animation2.setDuration(3500);
+        animation2.setFillAfter(true);
+        textView.startAnimation(animation2);
+
 
         findViewById(R.id.getStartedBtn).setOnClickListener(new View.OnClickListener() {
             @Override

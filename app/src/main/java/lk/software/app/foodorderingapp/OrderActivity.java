@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -38,7 +40,7 @@ public class OrderActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private OrderAdapter orderAdapter;
     private ArrayList<Order> orders;
-
+private LottieAnimationView lottieAnimationView;
     private Order order;
     FirebaseUser currentUser;
     FirebaseAuth firebaseAuth;
@@ -54,9 +56,11 @@ public class OrderActivity extends AppCompatActivity {
         orders = new ArrayList<>();
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
+        lottieAnimationView = findViewById(R.id.lottie);
         RecyclerView recyclerView = findViewById(R.id.orderRecycler);
         loadOrders();
         orderAdapter = new OrderAdapter(OrderActivity.this, orders);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OrderActivity.this);
         recyclerView.setAdapter(orderAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -99,11 +103,16 @@ public class OrderActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         orders.clear();
-                        for (DocumentSnapshot snapshot : value.getDocuments()) {
-                            order = snapshot.toObject(Order.class);
-                            order.setDocumentId(snapshot.getId());
+                        if(!value.getDocuments().isEmpty()){
+                            for (DocumentSnapshot snapshot : value.getDocuments()) {
+                                order = snapshot.toObject(Order.class);
+                                order.setDocumentId(snapshot.getId());
 
-                            orders.add(order);
+                                orders.add(order);
+                            }
+                        }else{
+                            lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+                            lottieAnimationView.setVisibility(View.VISIBLE);
                         }
                         for (DocumentChange documentChange : value.getDocumentChanges()) {
                             String statusChangeListen =  documentChange.getDocument().getString("orderStatus");
