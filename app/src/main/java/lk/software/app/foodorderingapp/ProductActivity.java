@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,7 +41,7 @@ public class ProductActivity extends AppCompatActivity {
 private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private Product product;
-
+    private  TextView rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ private FirebaseAuth firebaseAuth;
         TextView category = findViewById(R.id.categorySingle);
         TextView price = findViewById(R.id.priceSingle);
         TextView prepare_time = findViewById(R.id.prepareTime);
-        TextView rating = findViewById(R.id.product_rating);
+        rating = findViewById(R.id.product_rating);
         TextView person_per_serve = findViewById(R.id.person_per_serve);
         TextView description = findViewById(R.id.descriptionSingle);
         ImageView productImage = findViewById(R.id.productPicture);
@@ -74,37 +75,11 @@ private FirebaseAuth firebaseAuth;
         category.setText(product.getCategory_name());
         price.setText("Rs." + price_formatted);
         prepare_time.setText(String.valueOf(product.getPrepare_time()));
+        getRatings();
 
         person_per_serve.setText(String.valueOf(product.getPerson_per_serve()));
         description.setText(product.getDescription());
 
-        firebaseFirestore.collection("ratings").document(product.getProductDocumentId())
-                .collection("ratingByUsers").get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                           int count = 0;
-                           double totalRating = 0;
-                                   double avg = 0;
-
-                           for(DocumentSnapshot snapshot:queryDocumentSnapshots){
-                               Rating rating1 = snapshot.toObject(Rating.class);
-                               if(rating1!=null){
-                                   double productRating = rating1.getRating();
-                                   count++;
-                                   totalRating = totalRating+productRating;
-                                   avg = totalRating/count;
-
-                               }else{
-                                   rating.setText(String.valueOf(avg));
-                               }
-
-
-                           }
-
-                                rating.setText(String.valueOf(avg));
-                            }
-                        });
 
 
         firebaseStorage.getReference("productImages/" + product.getImage()).getDownloadUrl()
@@ -131,13 +106,17 @@ private FirebaseAuth firebaseAuth;
 
                     alertDialog.setPositiveButton("Submit",(dialog, which) -> {
                         RatingBar ratingBar = inflate.findViewById(R.id.ratingBar2);
-                        HashMap<String, Float> map = new HashMap<>();
-                        map.put("rating",ratingBar.getRating());
+                        HashMap<String, Double> map = new HashMap<>();
+                        double currentUserRating = ratingBar.getRating();
+                        map.put("rating",currentUserRating);
                         firebaseFirestore.collection("ratings").document(product.getProductDocumentId()).collection("ratingByUsers").document(firebaseAuth.getCurrentUser().getUid()).set(map)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
+                                        setRatings();
+
                                         Toast.makeText(getApplicationContext(),"Thank you for your rating",Toast.LENGTH_SHORT).show();
+
                                     }
                                 });
                     });
@@ -228,4 +207,78 @@ private FirebaseAuth firebaseAuth;
             }
         });
     }
+
+
+    private void getRatings() {
+        getTaskRatings()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        int count = 0;
+                        double totalRating = 0;
+                        double avg = 0;
+
+                        for(DocumentSnapshot snapshot:queryDocumentSnapshots){
+                            Rating rating1 = snapshot.toObject(Rating.class);
+                            if(rating1!=null){
+                                double productRating = rating1.getRating();
+                                count++;
+                                totalRating = totalRating+productRating;
+                                avg = totalRating/count;
+
+                            }else{
+                                rating.setText(String.valueOf(avg));
+                            }
+
+
+                        }
+
+                        rating.setText(String.valueOf(avg));
+                    }
+                });
+    }
+
+    private Task<QuerySnapshot> getTaskRatings() {
+        return firebaseFirestore.collection("ratings").document(product.getProductDocumentId())
+                .collection("ratingByUsers").get();
+    }
+
+    private void setRatings() {
+        getTaskRatings()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        int count = 0;
+                        double totalRating = 0;
+                        double avg = 0;
+
+                        for(DocumentSnapshot snapshot:queryDocumentSnapshots){
+                            Rating rating1 = snapshot.toObject(Rating.class);
+                            if(rating1!=null){
+                                double productRating = rating1.getRating();
+                                count++;
+                                totalRating = totalRating+productRating;
+                                avg = totalRating/count;
+                                product.setRating(avg);
+                                firebaseFirestore.collection("products")
+                                        .document(product.getProductDocumentId()).set(product)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.i("Rating updates","Updated");
+                                            }
+                                        });
+                            }else{
+                                rating.setText(String.valueOf(avg));
+                            }
+
+
+                        }
+
+                        rating.setText(String.valueOf(avg));
+                    }
+                });
+    }
+
+
 }

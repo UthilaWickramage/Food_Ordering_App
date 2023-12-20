@@ -21,10 +21,11 @@
         app:layout_constraintVertical_bias="0.418"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/no_result" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBrowseProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp" />
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp" />
 </FrameLayout>

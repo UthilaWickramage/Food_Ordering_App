@@ -71,7 +71,7 @@
             android:foregroundGravity="center"
             app:layout_constraintEnd_toStartOf="@+id/product_card_rating"
             app:layout_constraintTop_toTopOf="@+id/product_card_prepare_time"
-            app:srcCompat="@drawable/baseline_star_border_24" />
+            app:srcCompat="@drawable/baseline_star_24" />
 
         <TextView
             android:id="@+id/product_card_price"

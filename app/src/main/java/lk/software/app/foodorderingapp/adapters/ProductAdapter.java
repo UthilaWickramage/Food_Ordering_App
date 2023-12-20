@@ -55,7 +55,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.prepare_time.setText(String.valueOf(products.get(position).getPrepare_time()));
         holder.rating.setText(String.valueOf(products.get(position).getRating()));
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-
+holder.star_image.setImageResource(R.drawable.baseline_star_24);
         holder.price.setText("Rs." + decimalFormat.format(products.get(position).getPrice()));
         firebaseStorage.getReference("productImages/" + products.get(position).getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -85,7 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView product_image;
+        ImageView product_image,star_image;
         TextView name, prepare_time, rating, price;
 
         public ViewHolder(@NonNull View itemView) {
@@ -95,7 +95,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             prepare_time = itemView.findViewById(R.id.product_card_prepare_time);
             rating = itemView.findViewById(R.id.product_card_rating);
             price = itemView.findViewById(R.id.product_card_price);
-
+star_image = itemView.findViewById(R.id.imageView5);
         }
     }
 }

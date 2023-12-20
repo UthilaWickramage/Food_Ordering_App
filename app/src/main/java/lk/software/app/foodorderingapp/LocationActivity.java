@@ -64,7 +64,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     FirebaseFirestore firebaseFirestore;
     FirebaseUser currentUser;
     private ArrayList<String> addressData;
-
+private User user;
     TextView address, area, city;
     private Marker marker_current;
 
@@ -82,7 +82,24 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         address = findViewById(R.id.textView25);
         area = findViewById(R.id.textView37);
         city = findViewById(R.id.textView38);
+findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(user!=null){
+            updateUser(user);
 
+        }
+
+
+    }
+});
+
+findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        finish();
+    }
+});
         findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +174,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
-                                User user = task.getResult().toObject(User.class);
+                               user = task.getResult().toObject(User.class);
                                 if (user != null) {
                                     user.setLatitude(String.valueOf(latitude));
                                     user.setLongitude(String.valueOf(longitude));
@@ -180,7 +197,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         }
-                                        updateUser(user);
+
 
                                     } else {
                                         Log.i("empty", "empty");
@@ -216,7 +233,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
                     }
                 });
+
         finish();
+
     }
 
 
