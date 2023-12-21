@@ -62,12 +62,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle toggle;
     ImageView imageView, side_image;
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        loadFragment(searchContainer, SearchFragment.getInstance());
-//        loadFragment(fragmentContainer, HomeFragment.getInstance());
-//    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +215,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             } else {
                                 Log.d(RegisterActivity.TAG, "not successful");
                             }
+
                         }
 
 

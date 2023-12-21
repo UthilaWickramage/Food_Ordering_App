@@ -179,6 +179,7 @@ public class CartFragment extends Fragment {
                                                         }
                                                     });
                                         });
+
                                     }
 
 
@@ -230,6 +231,7 @@ setCartVisibility();
                             setCartVisibility();
                             calculateTotals();
                         }
+
 
                     }
                 });

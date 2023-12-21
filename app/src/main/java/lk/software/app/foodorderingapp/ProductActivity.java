@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 import lk.software.app.foodorderingapp.model.Cart_Item;
 import lk.software.app.foodorderingapp.model.Product;
@@ -38,10 +40,11 @@ import lk.software.app.foodorderingapp.model.Rating;
 public class ProductActivity extends AppCompatActivity {
     public static final String TAG = ProductActivity.class.getName();
     private FirebaseStorage firebaseStorage;
-private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private Product product;
-    private  TextView rating;
+    private TextView rating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,6 @@ private FirebaseAuth firebaseAuth;
         } else {
             product = (Product) intent.getSerializableExtra("product");
         }
-
 
 
         Log.d(TAG, product.getCategory_name());
@@ -81,7 +83,6 @@ private FirebaseAuth firebaseAuth;
         description.setText(product.getDescription());
 
 
-
         firebaseStorage.getReference("productImages/" + product.getImage()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -93,36 +94,46 @@ private FirebaseAuth firebaseAuth;
 
 
         Log.d(TAG, product.getImage());
-
+        findViewById(R.id.allRatings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(ProductActivity.this, RatingActivity.class);
+                intent1.putExtra("productId", product.getProductDocumentId());
+                intent1.putExtra("productName", product.getName());
+                startActivity(intent1);
+            }
+        });
         findViewById(R.id.ratingBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(firebaseAuth.getCurrentUser()!=null){
+                if (firebaseAuth.getCurrentUser() != null) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductActivity.this);
                     View inflate = getLayoutInflater().inflate(R.layout.rating_layout, null, false);
                     alertDialog.setView(inflate);
                     alertDialog.setTitle("Rate this food");
                     alertDialog.setMessage("How would you rate this food?");
 
-                    alertDialog.setPositiveButton("Submit",(dialog, which) -> {
+                    alertDialog.setPositiveButton("Submit", (dialog, which) -> {
                         RatingBar ratingBar = inflate.findViewById(R.id.ratingBar2);
-                        HashMap<String, Double> map = new HashMap<>();
+                        EditText review = inflate.findViewById(R.id.editTextTextMultiLine);
+                        HashMap<String, Object> map = new HashMap<>();
                         double currentUserRating = ratingBar.getRating();
-                        map.put("rating",currentUserRating);
+                        map.put("rating", currentUserRating);
+                        map.put("review",review.getText().toString());
                         firebaseFirestore.collection("ratings").document(product.getProductDocumentId()).collection("ratingByUsers").document(firebaseAuth.getCurrentUser().getUid()).set(map)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         setRatings();
 
-                                        Toast.makeText(getApplicationContext(),"Thank you for your rating",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Thank you for your rating", Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
                     });
                     alertDialog.show();
-                }else {
-                    Toast.makeText(getApplicationContext(),"You need to login to rate",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "You need to login to rate", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -165,9 +176,9 @@ private FirebaseAuth firebaseAuth;
         findViewById(R.id.addToOrderBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(firebaseAuth.getCurrentUser()==null){
-                    Toast.makeText(ProductActivity.this,"You need to login first",Toast.LENGTH_SHORT).show();
-                return;
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Toast.makeText(ProductActivity.this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 String saveCurrentTime, saveCurrentDate;
                 Calendar calendar = Calendar.getInstance();
@@ -177,7 +188,7 @@ private FirebaseAuth firebaseAuth;
                 SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
                 saveCurrentTime = currentTime.format(calendar.getTime());
                 TextView quantityTextView = findViewById(R.id.quantity);
-                double totalProductPrice = product.getPrice()*Double.parseDouble(quantityTextView.getText().toString());
+                double totalProductPrice = product.getPrice() * Double.parseDouble(quantityTextView.getText().toString());
 
                 Cart_Item cart_item = new Cart_Item(
                         product.getName(),
@@ -194,13 +205,13 @@ private FirebaseAuth firebaseAuth;
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
 
-                                Toast.makeText(ProductActivity.this,"Product added to Cart",Toast.LENGTH_LONG).show();
+                                Toast.makeText(ProductActivity.this, "Product added to Cart", Toast.LENGTH_LONG).show();
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(ProductActivity.this,"Something went wrong",Toast.LENGTH_LONG).show();
+                                Toast.makeText(ProductActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
 
                             }
                         });
@@ -218,15 +229,15 @@ private FirebaseAuth firebaseAuth;
                         double totalRating = 0;
                         double avg = 0;
 
-                        for(DocumentSnapshot snapshot:queryDocumentSnapshots){
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                             Rating rating1 = snapshot.toObject(Rating.class);
-                            if(rating1!=null){
+                            if (rating1 != null) {
                                 double productRating = rating1.getRating();
                                 count++;
-                                totalRating = totalRating+productRating;
-                                avg = totalRating/count;
+                                totalRating = totalRating + productRating;
+                                avg = totalRating / count;
 
-                            }else{
+                            } else {
                                 rating.setText(String.valueOf(avg));
                             }
 
@@ -252,23 +263,23 @@ private FirebaseAuth firebaseAuth;
                         double totalRating = 0;
                         double avg = 0;
 
-                        for(DocumentSnapshot snapshot:queryDocumentSnapshots){
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                             Rating rating1 = snapshot.toObject(Rating.class);
-                            if(rating1!=null){
+                            if (rating1 != null) {
                                 double productRating = rating1.getRating();
                                 count++;
-                                totalRating = totalRating+productRating;
-                                avg = totalRating/count;
+                                totalRating = totalRating + productRating;
+                                avg = totalRating / count;
                                 product.setRating(avg);
                                 firebaseFirestore.collection("products")
                                         .document(product.getProductDocumentId()).set(product)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Log.i("Rating updates","Updated");
+                                                Log.i("Rating updates", "Updated");
                                             }
                                         });
-                            }else{
+                            } else {
                                 rating.setText(String.valueOf(avg));
                             }
 

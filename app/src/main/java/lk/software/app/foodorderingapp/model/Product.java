@@ -17,7 +17,7 @@ private int person_per_serve;
 private String category_name;
     private int prepare_time;
     private String image;
-
+private String addedDate;
 private String productDocumentId;
 
     public Product(int id, String name, double price, double rating, String description, String category_name,int person_per_serve, int prepare_time, String image) {
@@ -52,6 +52,14 @@ private String productDocumentId;
 
     public void setPerson_per_serve(int person_per_serve) {
         this.person_per_serve = person_per_serve;
+    }
+
+    public String getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(String addedDate) {
+        this.addedDate = addedDate;
     }
 
     public Product() {

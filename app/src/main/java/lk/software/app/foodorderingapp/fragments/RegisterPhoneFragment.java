@@ -79,7 +79,9 @@ public class RegisterPhoneFragment extends Fragment {
                 progressDialog.setMessage("waiting");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-                signInWithPhone(mobile);
+                new Thread(()->{
+                    signInWithPhone(mobile);
+                }).start();
 
             }
         });

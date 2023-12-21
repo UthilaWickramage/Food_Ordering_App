@@ -93,6 +93,7 @@ firebaseFirestore= FirebaseFirestore.getInstance();
 
                                 }
 
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -193,6 +194,7 @@ firebaseFirestore= FirebaseFirestore.getInstance();
                     updateUI(user);
 
                 }
+
 
             }
         }).addOnFailureListener(new OnFailureListener() {

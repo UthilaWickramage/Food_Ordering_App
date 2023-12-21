@@ -112,6 +112,7 @@ public class RegisterEmailFragment extends Fragment {
 
                                 }
 
+
                             }
                         });
             }
@@ -163,6 +164,7 @@ public class RegisterEmailFragment extends Fragment {
                                                             }
                                                         }
 
+
                                                     }
                                                 });
                                     } else {
@@ -170,6 +172,7 @@ public class RegisterEmailFragment extends Fragment {
                                     }
                                     listener.updateUI(firebaseAuth.getCurrentUser());
                                 }
+
 
                             }
                         })

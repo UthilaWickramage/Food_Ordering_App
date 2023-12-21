@@ -64,7 +64,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     FirebaseFirestore firebaseFirestore;
     FirebaseUser currentUser;
     private ArrayList<String> addressData;
-private User user;
+    private User user;
     TextView address, area, city;
     private Marker marker_current;
 
@@ -82,24 +82,24 @@ private User user;
         address = findViewById(R.id.textView25);
         area = findViewById(R.id.textView37);
         city = findViewById(R.id.textView38);
-findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(user!=null){
-            updateUser(user);
+        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user != null) {
+                    updateUser(user);
 
-        }
+                }
 
 
-    }
-});
+            }
+        });
 
-findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        finish();
-    }
-});
+        findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,29 +174,24 @@ findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
-                               user = task.getResult().toObject(User.class);
+                                user = task.getResult().toObject(User.class);
                                 if (user != null) {
                                     user.setLatitude(String.valueOf(latitude));
                                     user.setLongitude(String.valueOf(longitude));
+
 
                                     findAddress(LocationActivity.this, latitude, longitude);
 
 
                                     if (!addressData.isEmpty()) {
-
-                                            user.setAddress(addressData.get(0));
-                                            user.setArea(addressData.get(1));
-                                            user.setCity(addressData.get(2));
-                                            user.setPostal_code(addressData.get(3));
-                                            Log.i("addressData", addressData.get(0));
-                                            address.setText(addressData.get(0));
-                                            area.setText(addressData.get(3));
-                                            city.setText(addressData.get(1));
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (InterruptedException e) {
-                                            throw new RuntimeException(e);
-                                        }
+                                        user.setAddress(addressData.get(0));
+                                        user.setArea(addressData.get(1));
+                                        user.setCity(addressData.get(2));
+                                        user.setPostal_code(addressData.get(3));
+                                        Log.i("addressData", addressData.get(0));
+                                        address.setText(addressData.get(0));
+                                        area.setText(addressData.get(3));
+                                        city.setText(addressData.get(1));
 
 
                                     } else {
@@ -205,9 +200,6 @@ findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
 
 
                                 }
-
-
-
 
 
                             }

@@ -205,6 +205,7 @@ public class RegisterFragment extends Fragment {
                                             }
                                         }
 
+
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -219,6 +220,7 @@ public class RegisterFragment extends Fragment {
 
 
                 }
+
 
             }
         }).addOnFailureListener(new OnFailureListener() {

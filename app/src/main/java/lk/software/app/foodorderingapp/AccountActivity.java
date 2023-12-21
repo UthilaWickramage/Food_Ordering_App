@@ -163,6 +163,7 @@ public class AccountActivity extends AppCompatActivity {
                             }
                         }
 
+
                     }
                 });
 
@@ -262,6 +263,7 @@ public class AccountActivity extends AppCompatActivity {
                                 }
                             }
 
+
                         }
                     });
         }
@@ -285,6 +287,7 @@ public class AccountActivity extends AppCompatActivity {
                                     updateUsersCollection(user);
                                 }
                             }
+
 
                         }
                     });
@@ -320,6 +323,7 @@ public class AccountActivity extends AppCompatActivity {
                                     updateUsersCollection(user);
                                 }
                             }
+
 
                         }
                     });
@@ -381,6 +385,7 @@ public class AccountActivity extends AppCompatActivity {
 
 
                             }
+
                         }
 
 
